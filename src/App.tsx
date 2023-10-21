@@ -10,7 +10,8 @@ function App() {
     useEffect(() => {
         (async () => {
             const result = await applyOperation(operation)
-            setUsers(result[0])
+            console.log('result', result.flat())
+            setUsers(result.flat()[0])
         })()
     }, [])
 

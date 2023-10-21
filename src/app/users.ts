@@ -6,11 +6,8 @@ const getUsers = () => operation(request('https://jsonplaceholder.typicode.com/u
 
 export const getModifiedUsers = () => {
     const req = getUsers()
-    const addOper = req.next(addInfoToUsers)
-    // addOper.next((v: any) => {
-    //     console.log('addOper', v)
-    //     return v
-    // })
+    req.next(addInfoToUsers)
+        .next(prependOkToNames)
     return req
 }
 
@@ -19,6 +16,15 @@ const addInfoToUsers = (users: User[]) => {
         return {
             ...user,
             name: `#${index + 1} ${user.name}`
+        }
+    });
+}
+
+const prependOkToNames = (users: User[]) => {
+    return users.map((user, index) => {
+        return {
+            ...user,
+            name: `${user.name} - OK`
         }
     });
 }
