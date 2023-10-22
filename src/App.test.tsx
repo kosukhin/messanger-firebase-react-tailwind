@@ -1,5 +1,5 @@
 import React from 'react';
-import {Request} from "./models/Request";
+import {Request} from "./models/request";
 
 test('Operation', () => {
   expect(true).toBe(true)

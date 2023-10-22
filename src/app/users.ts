@@ -1,8 +1,10 @@
 import {operation} from "../lib/operation/Operation";
-import {request} from "../models/Request";
+import {request} from "../models/request";
 import {User} from "../models/users";
+import {getUsersUrl} from "../constants/users";
+import {methodGet} from "../constants/request";
 
-const getUsers = () => operation(request('https://jsonplaceholder.typicode.com/users', 'GET'))
+const getUsers = () => operation(request(getUsersUrl, methodGet))
 
 export const getModifiedUsers = () => {
   const req = getUsers()
