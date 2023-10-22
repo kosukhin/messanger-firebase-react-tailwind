@@ -1,5 +1,5 @@
 function Footer() {
-  return (<footer>
+  return (<footer className="p-2 bg-footer mt-auto">
     footer
   </footer>)
 }

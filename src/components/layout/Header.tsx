@@ -1,5 +1,5 @@
 function Header() {
-  return (<header>head</header>)
+  return (<header className="p-2 bg-header">head</header>)
 }
 
 export default Header
