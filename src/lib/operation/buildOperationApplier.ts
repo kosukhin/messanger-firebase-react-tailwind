@@ -22,6 +22,20 @@ export function buildOperationApplier(operationsConfig: Record<string, Function>
       }) as Promise<any>[]))
     }
 
+    if (Array.isArray(prevResult)) {
+      prevResult = await Promise.all(prevResult.map(async (resultItem: any) => {
+        if (resultItem instanceof Operation) {
+          resultItem = await applyOperation(resultItem)
+        }
+
+        return resultItem;
+      }))
+    } else {
+      if (prevResult instanceof Operation) {
+        prevResult = await applyOperation(prevResult)
+      }
+    }
+
     return prevResult;
   }
 
