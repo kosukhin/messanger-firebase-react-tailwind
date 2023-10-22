@@ -1,40 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {User} from "./models/users";
-import {getModifiedUsers} from "./app/users";
-import {apply} from "./config/operation";
-import {flatten} from "./lib/operation/Operation";
+import React from 'react';
+import './assets/index.css'
+import Header from "./components/layout/Header";
+import Body from "./components/layout/Body";
+import Footer from "./components/layout/Footer";
 
 function App() {
-  const [users, setUsers] = useState<User[]>([])
-  const [usersMap, setUsersMap] = useState<Record<number, User>>({})
-  const getUsers = getModifiedUsers()
-
-  useEffect(() => {
-    (async () => {
-      const [items, itemsMap] = await apply(getUsers)
-      setUsers(flatten(items))
-      setUsersMap(flatten(itemsMap)[0])
-    })()
-  }, [])
-
   return (
     <div>
-      <h2>Пользователи</h2>
-      <div>
-        {users.map(user => (
-          <div key={user.id}>
-            <div>{user.name}</div>
-            <blockquote>
-              <div>
-                {usersMap[user.id].email}
-              </div>
-              <div>
-                {usersMap[user.id].phone}
-              </div>
-            </blockquote>
-          </div>
-        ))}
-      </div>
+      <Header/>
+      <Body/>
+      <Footer/>
     </div>
   );
 }
