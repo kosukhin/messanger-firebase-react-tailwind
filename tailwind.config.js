@@ -9,6 +9,7 @@ module.exports = {
       main: '#CFFAFE',
       header: '#06B6D4',
       footer: '#7DD3FC',
+      navbar: '#ECFEFF',
     },
   },
   plugins: [],

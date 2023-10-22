@@ -1,11 +1,11 @@
 import Navbar from "../Navbar";
 
 function Body() {
-  return (<div>
+  return (<div className="flex flex-grow flex-row">
     <Navbar/>
-    <div>
+    <main className="p-4">
       messages
-    </div>
+    </main>
   </div>)
 }
 
