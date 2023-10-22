@@ -1,12 +1,12 @@
 export type ConstructorProps<T> = T extends {
-  new (...args: infer U): any
-}
+    new(...args: infer U): any
+  }
   ? U
   : never
 
 export type ConstructorResult<T> = T extends {
-  new (...args: any): infer U
-}
+    new(...args: any): infer U
+  }
   ? U
   : never
 
@@ -14,7 +14,7 @@ export type NoMethods<T> = {
   [K in keyof T]: T[K] extends Function ? never : K
 }[keyof T]
 
-export function takeInstance<T extends { new (...args: any[]): any }>(
+export function takeInstance<T extends { new(...args: any[]): any }>(
   constructorFunction: T,
   ...args: ConstructorProps<T>
 ): ConstructorResult<T> {
