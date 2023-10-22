@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {applyOperation} from "./lib/operation/Operation";
 import {User} from "./models/users";
 import {getModifiedUsers} from "./app/users";
+import {applyOperation} from "./operation";
 
 function App() {
   const [users, setUsers] = useState<User[]>([])
