@@ -1,5 +1,5 @@
-import {buildOperationApplier} from "./lib/operation/buildOperationApplier";
-import {Request} from "./models/request";
+import {buildOperationApplier} from "../lib/operation/buildOperationApplier";
+import {Request} from "../models/request";
 
 export const {apply} = buildOperationApplier({
   Request: async (model: Request) => {

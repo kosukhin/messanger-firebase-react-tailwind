@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {User} from "./models/users";
 import {getModifiedUsers} from "./app/users";
-import {apply} from "./operation";
+import {apply} from "./config/operation";
 import {flatten} from "./lib/operation/Operation";
 
 function App() {
