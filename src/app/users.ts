@@ -12,7 +12,7 @@ export const getModifiedUsers = () => {
   req
     .next(getDetailForUsers)
     .next(buildUsersMap)
-  
+
   return req
 }
 
@@ -22,7 +22,7 @@ const getDetailForUsers = (users: User[]) => {
   })
 }
 
-const buildUsersMap = (users: User[]) => {
+const buildUsersMap = (users: User[]): Record<number, User> => {
   return users.reduce((acc: any, item) => {
     acc[item.id] = item
     return acc;
