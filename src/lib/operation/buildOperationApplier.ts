@@ -16,12 +16,6 @@ export function buildOperationApplier(operationsConfig: Record<string, Function>
       }
     }
 
-    if (root.nextSteps.length) {
-      prevResult = await Promise.all((root.nextSteps.map((operation) => {
-        return applyOperation(operation, prevResult)
-      }) as Promise<any>[]))
-    }
-
     if (Array.isArray(prevResult)) {
       prevResult = await Promise.all(prevResult.map(async (resultItem: any) => {
         if (resultItem instanceof Operation) {
@@ -34,6 +28,12 @@ export function buildOperationApplier(operationsConfig: Record<string, Function>
       if (prevResult instanceof Operation) {
         prevResult = await applyOperation(prevResult)
       }
+    }
+
+    if (root.nextSteps.length) {
+      prevResult = await Promise.all((root.nextSteps.map((operation) => {
+        return applyOperation(operation, prevResult)
+      }) as Promise<any>[]))
     }
 
     return prevResult;

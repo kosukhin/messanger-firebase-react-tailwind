@@ -6,9 +6,27 @@ const getUsers = () => operation(request('https://jsonplaceholder.typicode.com/u
 
 export const getModifiedUsers = () => {
   const req = getUsers()
-  req.next(addInfoToUsers)
+  req
+    .next(addInfoToUsers)
     .next(prependOkToNames)
+  req
+    .next(getDetailForUsers)
+    .next(buildUsersMap)
+  
   return req
+}
+
+const getDetailForUsers = (users: User[]) => {
+  return users.map((user: User) => {
+    return operation(request(`https://jsonplaceholder.typicode.com/users/${user.id}`, 'GET'))
+  })
+}
+
+const buildUsersMap = (users: User[]) => {
+  return users.reduce((acc: any, item) => {
+    acc[item.id] = item
+    return acc;
+  }, {});
 }
 
 const addInfoToUsers = (users: User[]) => {
