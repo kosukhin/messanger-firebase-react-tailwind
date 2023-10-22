@@ -17,3 +17,4 @@ export class Operation {
 
 export const operation = takeInstance.bind(null, Operation)
 
+export const flatten = (arr: any[]) => arr.flat(Infinity)

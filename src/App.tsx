@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {User} from "./models/users";
 import {getModifiedUsers} from "./app/users";
-import {applyOperation} from "./operation";
+import {apply} from "./operation";
+import {flatten} from "./lib/operation/Operation";
 
 function App() {
   const [users, setUsers] = useState<User[]>([])
   const [usersMap, setUsersMap] = useState<Record<number, User>>({})
-  const operation = getModifiedUsers()
+  const getUsers = getModifiedUsers()
 
   useEffect(() => {
     (async () => {
-      const result = await applyOperation(operation)
-      const users = result.flat()
-      setUsers(users[0])
-      setUsersMap(users[1])
+      const [items, itemsMap] = await apply(getUsers)
+      setUsers(flatten(items))
+      setUsersMap(flatten(itemsMap)[0])
     })()
   }, [])
 
