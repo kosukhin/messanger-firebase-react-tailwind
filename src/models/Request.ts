@@ -1,7 +1,9 @@
-import {takeInstance} from "../lib/I";
+import {takeInstance} from "../lib/operation/I";
+import {BaseModel} from "../lib/operation/BaseModel";
 
-export class Request {
+export class Request extends BaseModel {
   constructor(readonly url: string, readonly method: string, readonly headers?: Record<string, string>) {
+    super()
   }
 }
 

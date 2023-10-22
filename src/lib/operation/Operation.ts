@@ -1,4 +1,4 @@
-import {takeInstance} from "../I";
+import {takeInstance} from "./I";
 
 type operationTarget = Operation | Function | object
 
