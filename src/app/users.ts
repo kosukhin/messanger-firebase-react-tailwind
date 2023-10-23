@@ -9,11 +9,11 @@ const getUsers = () => operation(request(getUsersUrl, methodGet))
 export const getModifiedUsers = () => {
   const req = getUsers()
   req
-    .next(addInfoToUsers)
-    .next(prependOkToNames)
+    .then(addInfoToUsers)
+    .then(prependOkToNames)
   req
-    .next(getDetailForUsers)
-    .next(buildUsersMap)
+    .then(getDetailForUsers)
+    .then(buildUsersMap)
 
   return req
 }
