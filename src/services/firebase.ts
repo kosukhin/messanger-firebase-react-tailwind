@@ -13,14 +13,21 @@ const firebaseApp = initializeApp({
 
 const db = getFirestore();
 
-async function addProfile() {
-  const docRef = await addDoc(collection(db, "profiles"), {
-    id: "test",
-    name: "Anonym",
-    secretkey: 'hello'
-  });
-}
 
-registerApplier('Firebase', (model: Firebase) => {
+registerApplier('Firebase', async (model: Firebase) => {
   console.log(model)
+  if (model.action === 'add') {
+    await addDoc(
+      collection(
+        db,
+        model.collection
+      ),
+      model.data
+    );
+    model = model.takeChanged({
+      isDone: true
+    })
+  }
+
+  return model;
 })
