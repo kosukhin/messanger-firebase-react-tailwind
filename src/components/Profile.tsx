@@ -1,10 +1,12 @@
 import {FormEvent, useEffect} from "react";
 import {profile} from "../models/profile";
+import {useSelector} from "react-redux";
 import init = profile.initProfile;
 import createGroup = profile.createGroup;
 import createMessage = profile.createMessage;
 
 function Profile() {
+  const count = useSelector((state: any) => state.counter.value)
   useEffect(() => {
     init()
   }, [])
@@ -17,7 +19,6 @@ function Profile() {
 
   const onSaveMessage = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(e.target)
     const formData = new FormData(e.target as HTMLFormElement)
     await createMessage(
       String(formData.get('text')),
@@ -27,6 +28,7 @@ function Profile() {
 
   return (<div>
     <h1 className={"mb-2"}>Профиль</h1>
+    {count}
     <h2>Добавить группу</h2>
     <form onSubmit={onSaveGroup}>
       <div>

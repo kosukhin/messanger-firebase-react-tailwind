@@ -2,6 +2,7 @@ import {operation} from "../lib/operation";
 import {security} from "./security";
 import {browser} from "./browser";
 import {firebase} from "./firebase";
+import {store} from "./store";
 
 export namespace profile {
   import apply = operation.apply;
@@ -11,6 +12,7 @@ export namespace profile {
   import Cookies = browser.Cookies;
   import fb = firebase.models.firebase;
   import Firebase = firebase.models.Firebase;
+  import commit = store.commit;
 
   export namespace constants {
     export const cookieIdKey = 'uid';
@@ -32,6 +34,11 @@ export namespace profile {
         timeout: constants.cookieLifeTime
       }))
     }
+
+    await apply(commit('increment'))
+    await apply(commit('increment'))
+    await apply(commit('increment'))
+    await apply(commit('increment'))
   }
 
   export async function createGroup(name: string) {
