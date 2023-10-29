@@ -13,7 +13,7 @@ export namespace security {
   }
 
   export const hash = takeInstance.bind(null, Hash)
-
+  
   export class Uuid extends BaseModel {
     constructor(readonly value: string) {
       super();

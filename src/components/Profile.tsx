@@ -2,6 +2,7 @@ import {FormEvent, useEffect} from "react";
 import {profile} from "../models/profile";
 import init = profile.initProfile;
 import createGroup = profile.createGroup;
+import createMessage = profile.createMessage;
 
 function Profile() {
   useEffect(() => {
@@ -11,12 +12,17 @@ function Profile() {
   const onSaveGroup = async (e: FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement)
-    console.log('savegroup', formData.get('name'))
     await createGroup(String(formData.get('name')))
   }
 
-  const onSaveMessage = () => {
-    console.log('save message')
+  const onSaveMessage = async (e: FormEvent) => {
+    e.preventDefault();
+    console.log(e.target)
+    const formData = new FormData(e.target as HTMLFormElement)
+    await createMessage(
+      String(formData.get('text')),
+      String(formData.get('groupId')),
+    )
   }
 
   return (<div>
@@ -36,17 +42,19 @@ function Profile() {
     <h2>
       Добавить сообщение
     </h2>
-    <div>
-      <label className={"block"}>Группа</label>
-      <input type={"text"}/>
-    </div>
-    <div>
-      <label className={"block"}>Сообщение</label>
-      <textarea></textarea>
-    </div>
-    <div>
-      <button onClick={onSaveMessage}>Сохранить</button>
-    </div>
+    <form onSubmit={onSaveMessage}>
+      <div>
+        <label className={"block"}>Группа</label>
+        <input name={"groupId"} type={"text"}/>
+      </div>
+      <div>
+        <label className={"block"}>Сообщение</label>
+        <textarea name={"text"}></textarea>
+      </div>
+      <div>
+        <button type={"submit"}>Сохранить</button>
+      </div>
+    </form>
   </div>)
 }
 

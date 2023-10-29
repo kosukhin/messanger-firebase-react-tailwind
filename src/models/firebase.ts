@@ -9,7 +9,7 @@ export namespace firebase {
       constructor(
         readonly action: FirebaseActions,
         readonly collection: string,
-        readonly data: any,
+        readonly data: Record<string, string>,
         readonly id?: string,
         readonly isDone = false
       ) {

@@ -43,4 +43,18 @@ export namespace profile {
 
     return result.isDone
   }
+
+  export async function createMessage(
+    text: string,
+    groupId: string
+  ) {
+    const fromId = await userId()
+    const result = await apply<Firebase>(fb('add', 'messages', {
+      groupId,
+      fromId: fromId.value,
+      text
+    }));
+
+    return result.isDone
+  }
 }
