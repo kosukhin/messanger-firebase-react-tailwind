@@ -1,13 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-
-// Регистрация сервисов
-import './services/request';
-import './services/firebase';
-import './services/security';
-import './services/browser';
-import './services/store';
 import {Provider} from "react-redux";
 import {store} from "./store/store";
 

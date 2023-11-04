@@ -1,34 +1,44 @@
 import {FormEvent, useEffect} from "react";
-import {profile} from "../models/profile";
 import {useSelector} from "react-redux";
-import init = profile.initProfile;
-import createGroup = profile.createGroup;
-import createMessage = profile.createMessage;
+import {takeInstance} from "../modules/base/I";
+import {StoreCommit} from "../modules/store/StoreCommit";
+import {takeServices} from "../modules/base/takeServices";
 
 function Profile() {
   const count = useSelector((state: any) => state.counter.value)
   useEffect(() => {
-    init()
+    const {profile} = takeServices()
+    profile.initProfile()
   }, [])
 
   const onSaveGroup = async (e: FormEvent) => {
     e.preventDefault();
+    const {profile} = takeServices()
     const formData = new FormData(e.target as HTMLFormElement)
-    await createGroup(String(formData.get('name')))
+    await profile.createGroup(String(formData.get('name')))
   }
 
   const onSaveMessage = async (e: FormEvent) => {
     e.preventDefault();
+    const {profile} = takeServices()
     const formData = new FormData(e.target as HTMLFormElement)
-    await createMessage(
+    await profile.createMessage(
       String(formData.get('text')),
       String(formData.get('groupId')),
     )
   }
 
+  const increment = async () => {
+    const {storeCommit} = takeServices()
+    await storeCommit.apply(takeInstance(StoreCommit, 'increment'))
+  }
+
   return (<div>
     <h1 className={"mb-2"}>Профиль</h1>
     {count}
+    <div>
+      <button onClick={increment}>Увеличить</button>
+    </div>
     <h2>Добавить группу</h2>
     <form onSubmit={onSaveGroup}>
       <div>
