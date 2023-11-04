@@ -1,6 +1,6 @@
 import {BaseModel} from "../base/BaseModel";
 
-type FirebaseActions = 'add' | 'update' | 'remove' | 'get' | 'list'
+type FirebaseActions = 'add' | 'update' | 'remove' | 'get' | 'list' | 'onCollection' | 'onDocument'
 
 export class Firebase extends BaseModel {
   constructor(

@@ -24,6 +24,13 @@ export class ProfileService extends BaseService {
         timeout: Profile.cookieLifeTime
       }))
     }
+
+    const {firebase} = takeServices()
+    await firebase.apply(takeInstance(Firebase, 'onCollection', 'groups', {
+      onData(data: any) {
+        console.log(data)
+      },
+    }))
   }
 
   async getGroup(id: string) {

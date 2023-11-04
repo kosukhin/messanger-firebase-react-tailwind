@@ -8,6 +8,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  onSnapshot,
   query,
   setDoc,
   where
@@ -60,7 +61,6 @@ export class FirebaseRepository extends BaseRepository {
       if (model.action === 'get') {
         const result = doc(db, model.collection, model.data.id);
         const docSnap = await getDoc(result);
-        console.log('is existed', docSnap.exists())
         return model.takeChanged({
           result: docSnap.data()
         })
@@ -76,27 +76,54 @@ export class FirebaseRepository extends BaseRepository {
           q = query(q, ...wheres);
         }
         const querySnapshot = await getDocs(q);
-        const result = await (new Promise((resolve, reject) => {
-          const result: any[] = [];
-          try {
-            querySnapshot.forEach((doc) => {
-              result.push({_id: doc.id, ...(doc.data as any)()});
-
-              if (result.length === querySnapshot.docs.length) {
-                resolve(result)
-              }
-            });
-          } catch (e) {
-            reject(e)
-          }
-        }))
+        const result = await getShapshotResults(querySnapshot as any)
 
         return model.takeChanged({
           result
         })
       }
 
+      if (model.action === 'onCollection') {
+        let q: any = collection(db, model.collection);
+        onSnapshot(
+          q,
+          async (snapshot: any) => {           // ...
+            const result = await getShapshotResults(snapshot)
+
+            if (model.data.onData) {
+              model.data.onData(result)
+            }
+          },
+          (error) => {
+            // ...
+            if (model.data.onError) {
+              model.data.onError(error)
+            }
+          });
+      }
+
+      if (model.action === 'onDocument') {
+
+      }
+
       return model;
     }]
   }
+}
+
+async function getShapshotResults(shapshot: any) {
+  return await (new Promise((resolve, reject) => {
+    const result: any[] = [];
+    try {
+      shapshot.forEach((doc: any) => {
+        result.push({_id: doc.id, ...(doc.data as any)()});
+
+        if (result.length === shapshot.docs.length) {
+          resolve(result)
+        }
+      });
+    } catch (e) {
+      reject(e)
+    }
+  }))
 }
