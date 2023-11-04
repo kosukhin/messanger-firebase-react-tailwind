@@ -1,6 +1,6 @@
 function Footer() {
   return (<footer className="p-4 bg-footer mt-auto">
-    footer
+    All right!
   </footer>)
 }
 

@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 import {takeInstance} from "../modules/base/I";
 import {StoreCommit} from "../modules/store/StoreCommit";
 import {takeServices} from "../modules/base/takeServices";
+import BaseButton from "./ui/BaseButton";
 
 function Profile() {
   const count = useSelector((state: any) => state.counter.value)
@@ -33,26 +34,93 @@ function Profile() {
     await storeCommit.apply(takeInstance(StoreCommit, 'increment'))
   }
 
+  const getGroup = () => {
+    const {profile} = takeServices()
+    profile.getGroup('0lFf4hrVHIlWPMyaig5n');
+  }
+
+  const getGroups = () => {
+    const {profile} = takeServices()
+    profile.getAllGroups();
+  }
+
+  const onChangeGroup = async (e: FormEvent) => {
+    e.preventDefault();
+    const {profile} = takeServices()
+    const formData = new FormData(e.target as HTMLFormElement)
+    await profile.updateGroup({
+      _id: "0lFf4hrVHIlWPMyaig5n",
+      name: String(formData.get('name')),
+      id: String(formData.get('id'))
+    })
+  }
+
+  const findById = () => {
+    const {profile} = takeServices()
+    profile.findById('63a85a02-fb3d-4824-b875-baf4d810f149');
+  }
+
+  const onDelete = async (e: FormEvent) => {
+    e.preventDefault();
+    const {profile} = takeServices()
+    const formData = new FormData(e.target as HTMLFormElement)
+    await profile.deleteById(String(formData.get('id')))
+  }
+
   return (<div>
     <h1 className={"mb-2"}>Профиль</h1>
     {count}
-    <div>
-      <button onClick={increment}>Увеличить</button>
+    <div className={'mt-2'}>
+      <BaseButton onClick={increment}>Увеличить</BaseButton>
     </div>
-    <h2>Добавить группу</h2>
+    <hr className={'mb-3 mt-3'}/>
+    <BaseButton onClick={getGroup}>Получить одну запись по _ID</BaseButton>
+    <hr className={'mb-3 mt-3'}/>
+    <BaseButton onClick={getGroups}>Получить список</BaseButton>
+    <hr className={'mb-3 mt-3'}/>
+    <BaseButton onClick={findById}>Найти по ID</BaseButton>
+    <hr className={'mb-3 mt-3'}/>
+    <h2>Обновить группу</h2>
+    <form onSubmit={onChangeGroup}>
+      <div className={'mb-2'}>
+        <input placeholder={'id'} name={"id"} type={"text"}/>
+      </div>
+      <div className={'mb-2'}>
+        <input placeholder={'name'} name={"name"} type={"text"}/>
+      </div>
+      <div className={"mb-2"}>
+        <BaseButton type={"submit"}>
+          Обновить
+        </BaseButton>
+      </div>
+    </form>
+    <hr className={'mb-3 mt-3'}/>
+    <h2>Удалить группу</h2>
+    <form onSubmit={onDelete}>
+      <div className={'mb-2'}>
+        <input placeholder={'id'} name={"id"} type={"text"}/>
+      </div>
+      <div className={"mb-2"}>
+        <BaseButton type={"submit"}>
+          Удалить
+        </BaseButton>
+      </div>
+    </form>
+    <hr className={'mb-3 mt-3'}/>
+    <h2>Создать группу</h2>
     <form onSubmit={onSaveGroup}>
-      <div>
+      <div className={'mb-2'}>
         <input name={"name"} type={"text"}/>
       </div>
       <div className={"mb-2"}>
-        <button type={"submit"}>
+        <BaseButton type={"submit"}>
           Сохранить
-        </button>
+        </BaseButton>
       </div>
     </form>
     <hr/>
     <h2>
-      Добавить сообщение
+      Создать сообщение
     </h2>
     <form onSubmit={onSaveMessage}>
       <div>
@@ -64,7 +132,7 @@ function Profile() {
         <textarea name={"text"}></textarea>
       </div>
       <div>
-        <button type={"submit"}>Сохранить</button>
+        <BaseButton type={"submit"}>Сохранить</BaseButton>
       </div>
     </form>
   </div>)
