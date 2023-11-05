@@ -5,6 +5,7 @@ import {HashService} from "../security/HashService";
 import {StoreCommitService} from "../store/StoreCommitService";
 import {RequestService} from "../request/RequestService";
 import {ProfileService} from "../profile/ProfileService";
+import {GroupService} from "../group/GroupService";
 
 export function takeServices() {
   return {
@@ -25,6 +26,9 @@ export function takeServices() {
     },
     get profile() {
       return takeSingleton(ProfileService).setup()
+    },
+    get groups() {
+      return takeSingleton(GroupService).setup()
     }
   }
 }

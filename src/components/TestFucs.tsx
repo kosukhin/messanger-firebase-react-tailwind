@@ -31,7 +31,7 @@ function TestFucs() {
 
   const increment = async () => {
     const {storeCommit} = takeServices()
-    await storeCommit.apply(takeInstance(StoreCommit, 'increment'))
+    await storeCommit.apply(takeInstance(StoreCommit, 'incremented'))
   }
 
   const getGroup = () => {

@@ -1,20 +1,26 @@
 import {Applier, BaseRepository} from "../base/BaseRepository";
 import {StoreCommit} from "./StoreCommit";
-import {store} from "../../store/store";
 import {counterSlice} from "../../store/counterSlice";
+import {groupSlice} from "../../store/groupSlice";
+import {messageSlice} from "../../store/messageSlice";
+import {store} from "../../store/store";
 
 export class StoreCommitRepository extends BaseRepository {
   registerApplier(): Applier {
     const {incremented, decremented} = counterSlice.actions
-    store.subscribe(() => console.log(store.getState()))
+    const {setGroups} = groupSlice.actions
+    const {setMessages} = messageSlice.actions
+
+    const actions: any = {
+      incremented,
+      decremented,
+      setGroups,
+      setMessages
+    }
 
     return ['StoreCommit', (model: StoreCommit) => {
-      console.log(model)
-      if (model.action === 'increment') {
-        store.dispatch(incremented())
-      }
-      if (model.action === 'decremented') {
-        store.dispatch(decremented())
+      if (actions[model.action]) {
+        store.dispatch(actions[model.action](model.payload))
       }
     }]
   }
