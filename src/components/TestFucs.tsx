@@ -5,7 +5,7 @@ import {StoreCommit} from "../modules/store/StoreCommit";
 import {takeServices} from "../modules/base/takeServices";
 import BaseButton from "./ui/BaseButton";
 
-function Profile() {
+function TestFucs() {
   const count = useSelector((state: any) => state.counter.value)
   useEffect(() => {
     const {profile} = takeServices()
@@ -138,4 +138,4 @@ function Profile() {
   </div>)
 }
 
-export default Profile
+export default TestFucs

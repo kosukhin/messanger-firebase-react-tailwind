@@ -1,11 +1,12 @@
 import Navbar from "../Navbar";
-import Profile from "../Profile";
+import {RouterProvider,} from "react-router-dom";
+import {router} from "../../router";
 
 function Body() {
   return (<div className="flex flex-grow flex-row">
     <Navbar/>
     <main className="p-4 flex-grow bg-main">
-      <Profile/>
+      <RouterProvider router={router}/>
     </main>
   </div>)
 }
