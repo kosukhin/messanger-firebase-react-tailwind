@@ -7,8 +7,9 @@ import {takeServices} from "./modules/base/takeServices";
 
 function App() {
   useEffect(() => {
-    const {groups} = takeServices()
+    const {groups, messages} = takeServices()
     groups.watchGroups()
+    messages.watchMessages()
   }, [])
 
   return (

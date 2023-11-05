@@ -5,7 +5,13 @@ function Navbar() {
   const groups: Group[] = useSelector((state: any) => state.groups.groups)
 
   return (<nav className="p-4 bg-navbar w-full max-w-[200px]">
-    {groups ? groups.map(group => (<div key={group.id}>{group.name}</div>)) : ''}
+    {groups ? groups.map(group => (
+      <div key={group.id}>
+        <a href={`/messages/${group._id}`}>
+          {group.name}
+        </a>
+      </div>
+    )) : ''}
   </nav>)
 }
 

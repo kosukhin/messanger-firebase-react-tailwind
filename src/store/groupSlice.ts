@@ -8,7 +8,6 @@ export const groupSlice = createSlice({
   },
   reducers: {
     setGroups: (state, {payload}) => {
-      console.log('groups', payload)
       state.groups = payload
     },
   }

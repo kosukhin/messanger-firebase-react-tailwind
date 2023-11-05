@@ -10,7 +10,6 @@ export class GroupService extends BaseService {
     const {firebase, storeCommit} = takeServices()
     await firebase.apply(takeInstance(Firebase, 'onCollection', 'groups', {
       async onData(data: Group[]) {
-        console.log(data)
         await storeCommit.apply(takeInstance(StoreCommit, 'setGroups', data))
       },
     }))

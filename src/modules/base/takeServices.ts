@@ -6,6 +6,7 @@ import {StoreCommitService} from "../store/StoreCommitService";
 import {RequestService} from "../request/RequestService";
 import {ProfileService} from "../profile/ProfileService";
 import {GroupService} from "../group/GroupService";
+import {MessageService} from "../message/MessageService";
 
 export function takeServices() {
   return {
@@ -29,6 +30,9 @@ export function takeServices() {
     },
     get groups() {
       return takeSingleton(GroupService).setup()
+    },
+    get messages() {
+      return takeSingleton(MessageService).setup()
     }
   }
 }

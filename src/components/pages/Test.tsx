@@ -1,11 +1,11 @@
-import {FormEvent, useEffect} from "react";
 import {useSelector} from "react-redux";
-import {takeInstance} from "../modules/base/I";
-import {StoreCommit} from "../modules/store/StoreCommit";
-import {takeServices} from "../modules/base/takeServices";
-import BaseButton from "./ui/BaseButton";
+import {FormEvent, useEffect} from "react";
+import {takeServices} from "../../modules/base/takeServices";
+import {takeInstance} from "../../modules/base/I";
+import {StoreCommit} from "../../modules/store/StoreCommit";
+import BaseButton from "../ui/BaseButton";
 
-function TestFucs() {
+export default function Test() {
   const count = useSelector((state: any) => state.counter.value)
   useEffect(() => {
     const {profile} = takeServices()
@@ -137,5 +137,3 @@ function TestFucs() {
     </form>
   </div>)
 }
-
-export default TestFucs
