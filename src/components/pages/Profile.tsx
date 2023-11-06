@@ -18,16 +18,18 @@ export default function Profile() {
   const onSave = async (e: FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement)
-    await users.crud.update(user.takeChanged({
+    const newUser = user.takeChanged({
       name: String(formData.get('name')),
       avatar: String(formData.get('avatar'))
-    }))
+    })
+    console.log(newUser)
+    await users.crud.update(newUser)
   }
 
   return (<div>
     <h1 className={'text-6xl mb-4'}>Профиль</h1>
     <div className={'mb-2'}>
-      <img className="w-20 h-20 rounded-full" src={avatar} alt="Rounded avatar"/>
+      <img className="w-20 h-20 rounded-full" src={user.avatar} alt="Rounded avatar"/>
     </div>
     <form onSubmit={onSave}>
       <div className={'mb-2'}>

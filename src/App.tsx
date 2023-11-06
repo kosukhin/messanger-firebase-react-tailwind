@@ -7,10 +7,11 @@ import {takeServices} from "./modules/base/takeServices";
 
 function App() {
   useEffect(() => {
-    const {groups, messages, profile} = takeServices()
+    const {groups, messages, profile, users} = takeServices()
     groups.watchGroups()
     messages.watchMessages()
     profile.initProfile()
+    users.watchUsers()
   }, [])
 
   return (
