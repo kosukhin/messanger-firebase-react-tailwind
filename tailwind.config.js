@@ -10,6 +10,7 @@ module.exports = {
       header: '#06B6D4',
       footer: '#7DD3FC',
       navbar: '#ECFEFF',
+      message: '#fff',
       'slate-500': '#3b82f6',
       'slate-600': '#216adf',
       'slate-400': '#0c4196',

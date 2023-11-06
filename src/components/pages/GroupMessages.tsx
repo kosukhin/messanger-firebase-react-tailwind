@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import {FormEvent, useMemo} from "react";
 import BaseButton from "../ui/BaseButton";
 import {takeServices} from "../../modules/base/takeServices";
+import AppMessage from "../app/AppMessage";
 
 export async function loader({params}: any) {
   return {
@@ -32,20 +33,28 @@ export default function GroupMessages() {
     )
   }
 
+  const {groups} = takeServices()
+  const onDeleteGroup = async (e: Event) => {
+    e.preventDefault();
+    await groups.crud.deleteById(ld.id)
+  }
+
   return (<div className={'flex flex-col flex-grow'}>
+    {groupMessages && !groupMessages.length ? 'Нет сообщений' : ''}
     {groupMessages ? groupMessages.map(message => (
-      <div key={message._id}>
-        {message.text}
+      <div key={message._id} className={'mb-2'}>
+        <AppMessage message={message}/>
       </div>
-    )) : ''}
+    )) : 'Нет сооб'}
     <div className={'mt-auto'}>
       <form onSubmit={onNewMessage}>
         <div className={'mb-2'}>
           <label className={"block"}>Сообщение</label>
-          <textarea className={'block w-[100%] p-2'} name={"text"}></textarea>
+          <textarea placeholder={'Новое сообщение'} className={'block w-[100%] p-2'} name={"text"}></textarea>
         </div>
-        <div>
-          <BaseButton type={"submit"}>Сохранить</BaseButton>
+        <div className={'gap-2 flex'}>
+          <BaseButton type={"submit"}>Отправить</BaseButton>
+          <BaseButton onClick={onDeleteGroup}>Удалить группу</BaseButton>
         </div>
       </form>
     </div>
