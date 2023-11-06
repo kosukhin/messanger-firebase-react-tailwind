@@ -1,5 +1,42 @@
+import {User} from "../../modules/user/User";
+import BaseButton from "../ui/BaseButton";
+import {FormEvent, useEffect, useState} from "react";
+import {takeServices} from "../../modules/base/takeServices";
+import {takeInstance} from "../../modules/base/I";
+
 export default function Profile() {
+  const {users} = takeServices()
+  const avatar = User.defaultAvatar;
+  const [user, setUser] = useState(takeInstance(User, '', '', '', ''))
+
+  useEffect(() => {
+    users.currentUser().then(user => {
+      setUser(user)
+    })
+  }, [])
+
+  const onSave = async (e: FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement)
+    await users.crud.update(user.takeChanged({
+      name: String(formData.get('name')),
+      avatar: String(formData.get('avatar'))
+    }))
+  }
+
   return (<div>
-    <h1>Профиль</h1>
+    <h1 className={'text-6xl mb-4'}>Профиль</h1>
+    <div className={'mb-2'}>
+      <img className="w-20 h-20 rounded-full" src={avatar} alt="Rounded avatar"/>
+    </div>
+    <form onSubmit={onSave}>
+      <div className={'mb-2'}>
+        <input className={'p-2'} defaultValue={user.name} placeholder={'Имя'} type={'text'} name={'name'}/>
+      </div>
+      <div className={'mb-2'}>
+        <input className={'p-2'} defaultValue={user.avatar} placeholder={'Аватар'} type={'text'} name={'avatar'}/>
+      </div>
+      <BaseButton>Сохранить</BaseButton>
+    </form>
   </div>)
 }

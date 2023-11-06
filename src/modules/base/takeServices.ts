@@ -7,6 +7,7 @@ import {RequestService} from "../request/RequestService";
 import {ProfileService} from "../profile/ProfileService";
 import {GroupService} from "../group/GroupService";
 import {MessageService} from "../message/MessageService";
+import {UserService} from "../user/UserService";
 
 export function takeServices() {
   return {
@@ -33,6 +34,9 @@ export function takeServices() {
     },
     get messages() {
       return takeSingleton(MessageService).setup()
+    },
+    get users() {
+      return takeSingleton(UserService).setup()
     }
   }
 }

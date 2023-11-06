@@ -26,55 +26,6 @@ export class ProfileService extends BaseService {
     }
   }
 
-  async getGroup(id: string) {
-    const {firebase} = takeServices();
-    const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'get', 'groups', {
-      id
-    }));
-    console.log('get result', result.result);
-  }
-
-  async getAllGroups() {
-    const {firebase} = takeServices();
-    const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'list', 'groups', {}));
-    console.log('get result', result.result);
-  }
-
-  async findById(id: string) {
-    const {firebase} = takeServices();
-    const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'list', 'groups', {
-      where: [
-        ['id', '==', id]
-      ]
-    }));
-    console.log('get result', result.result);
-  }
-
-  async deleteById(id: string) {
-    const {firebase} = takeServices();
-    const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'remove', 'groups', {
-      id
-    }));
-    console.log('remove result', result.result);
-  }
-
-  async updateGroup(data: any) {
-    const {firebase} = takeServices();
-    const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'update', 'groups', data));
-    console.log('get result', result.result);
-  }
-
-  async createGroup(name: string) {
-    const {hash, firebase} = takeServices();
-    const id = await hash.apply<Hash>(takeInstance(Hash, Hash.hashUuid));
-    const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'add', 'groups', {
-      id: id.value,
-      name
-    }));
-
-    return result.isDone
-  }
-
   async createMessage(
     text: string,
     groupId: string

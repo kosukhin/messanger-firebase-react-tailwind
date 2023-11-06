@@ -5,7 +5,7 @@ export abstract class BaseService {
   repositories: BaseRepository[] = []
   appliers: Record<string, Function> = {}
   isSetup = false
-  isDebug = true
+  isDebug = false
 
   setup() {
     if (!this.isSetup) {
