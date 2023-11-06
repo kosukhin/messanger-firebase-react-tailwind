@@ -1,6 +1,6 @@
 # Мессенджер на основе Firebase
 
-
+https://github.com/kosukhin/messanger-firebase-react-tailwind/assets/109918884/c53bda8d-6780-4efc-aab5-a869ecc1a022
 
 # Идея
 
