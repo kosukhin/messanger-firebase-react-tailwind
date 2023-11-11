@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/kosukhin/weather-app/compare/v0.1.1...v0.1.2) (2023-11-11)
+
+
+### Features
+
+* **main:** Исправить отображение сообщений ([fa0a40c](https://github.com/kosukhin/weather-app/commit/fa0a40c1be70af27a7b107b5ab95c9e4e8b9afe2))
+
 ### 0.1.1 (2023-11-11)
 
 
