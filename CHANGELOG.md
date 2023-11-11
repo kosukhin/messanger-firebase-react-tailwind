@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/kosukhin/weather-app/compare/v0.1.2...v0.1.3) (2023-11-11)
+
+
+### Features
+
+* **main:** Доделать сброс сообщений и групп при удалении последнего ([2800267](https://github.com/kosukhin/weather-app/commit/2800267f21a342b66a1849b5b9c89a5d072b4338))
+
 ### [0.1.2](https://github.com/kosukhin/weather-app/compare/v0.1.1...v0.1.2) (2023-11-11)
 
 
