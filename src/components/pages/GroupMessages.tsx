@@ -6,6 +6,8 @@ import BaseButton from "../ui/BaseButton";
 import {takeServices} from "../../modules/base/takeServices";
 import AppMessage from "../app/AppMessage";
 import {Group} from "../../modules/group/Group";
+import {takeInstance} from "../../modules/base/I";
+import {StoreCommit} from "../../modules/store/StoreCommit";
 
 export async function loader({params}: any) {
   return {
@@ -20,7 +22,7 @@ export default function GroupMessages() {
   const groupMessages = useMemo(() => {
     return messages.filter((message: Message) => {
       return message.groupId === ld.id
-    }).sort((a, b) => b.time - a.time)
+    }).sort((a, b) => a.time - b.time)
   }, [ld.id, messages])
   const group = useMemo(() => {
     return groupItems.find((g) => g._id === ld.id)
@@ -38,10 +40,20 @@ export default function GroupMessages() {
     )
   }
 
-  const {groups} = takeServices()
+  const {groups, storeCommit} = takeServices()
   const onDeleteGroup = async (e: Event) => {
     e.preventDefault();
-    await groups.crud.deleteById(ld.id)
+    await groups.crud.deleteById(ld.id, async () => {
+      if (groupItems.length !== 1) {
+        return;
+      }
+
+      await storeCommit.apply(takeInstance(
+        StoreCommit,
+        'setGroups',
+        []
+      ))
+    })
   }
 
   return (<div className={'flex flex-col flex-grow'}>

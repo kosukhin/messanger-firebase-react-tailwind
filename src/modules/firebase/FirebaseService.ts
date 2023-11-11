@@ -11,7 +11,7 @@ export interface FirebaseCrud<T extends any> {
 
   findById(id: string): Promise<T>;
 
-  deleteById(id: string): Promise<T>;
+  deleteById(id: string, onDelete?: Function): Promise<T>;
 
   update(data: any): Promise<T>;
 
@@ -49,10 +49,11 @@ export class FirebaseService extends BaseService {
 
         return result.result;
       },
-      async deleteById(id: string) {
+      async deleteById(id: string, onDelete?: Function) {
         const {firebase} = takeServices();
         const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'remove', collectionName, {
-          id
+          id,
+          onDelete
         }));
 
         return result.result;

@@ -5,6 +5,7 @@ import {User} from "../../modules/user/User";
 import {useSelector} from "react-redux";
 import {useEffect, useMemo, useState} from "react";
 import {takeInstance} from "../../modules/base/I";
+import {StoreCommit} from "../../modules/store/StoreCommit";
 
 export default function AppMessage(props: any) {
   const users: User[] = useSelector((state: any) => {
@@ -26,10 +27,21 @@ export default function AppMessage(props: any) {
     })
   }, [])
 
-  const {messages} = takeServices()
+  const {messages, storeCommit} = takeServices()
 
+  const messagesAll: Message[] = useSelector((state: any) => state.messages.messages)
   const onDelete = (id: string) => async () => {
-    await messages.crud.deleteById(id)
+    await messages.crud.deleteById(id, async () => {
+      if (messagesAll.length !== 1) {
+        return;
+      }
+
+      await storeCommit.apply(takeInstance(
+        StoreCommit,
+        'setMessages',
+        []
+      ))
+    })
   }
 
   return (<div className={'p-3 bg-message'}>

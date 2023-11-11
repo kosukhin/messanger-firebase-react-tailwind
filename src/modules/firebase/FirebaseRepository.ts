@@ -53,6 +53,9 @@ export class FirebaseRepository extends BaseRepository {
       if (model.action === 'remove') {
         const result = doc(db, model.collection, model.data.id);
         const deletionResult = await deleteDoc(result);
+        if (model.data.onDelete) {
+          model.data.onDelete();
+        }
         return model.takeChanged({
           result: deletionResult
         })

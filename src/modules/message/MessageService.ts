@@ -19,6 +19,7 @@ export class MessageService extends BaseService {
     const {firebase, storeCommit} = takeServices()
     await firebase.apply(takeInstance(Firebase, 'onCollection', Message.collectionName, {
       async onData(data: Message[]) {
+        console.log('new messages')
         await storeCommit.apply(takeInstance(
           StoreCommit,
           'setMessages',
