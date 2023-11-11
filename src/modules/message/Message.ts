@@ -7,7 +7,8 @@ export class Message extends BaseModel {
     readonly _id: string,
     readonly groupId: string,
     readonly text: string,
-    readonly fromId: string
+    readonly fromId: string,
+    readonly time: number
   ) {
     super();
   }

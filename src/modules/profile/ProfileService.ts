@@ -35,7 +35,8 @@ export class ProfileService extends BaseService {
     const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'add', 'messages', {
       groupId,
       fromId: String(fromId.value),
-      text
+      text,
+      time: (new Date()).getTime()
     }));
 
     return result.isDone

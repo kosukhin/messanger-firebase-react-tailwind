@@ -40,6 +40,12 @@ export default function AppMessage(props: any) {
     <div className={'mb-2 text-2xl'}>
       {message.text}
     </div>
+    <div className={'mb-2'}>
+      <span className={'mr-2'}>
+      Отправлено:
+      </span>
+      {(new Date(message.time)).toLocaleString('ru')}
+    </div>
     {user.id === message.fromId ? (
       <BaseButton onClick={onDelete(message._id)}>
         Удалить

@@ -5,6 +5,7 @@ import {FormEvent, useMemo} from "react";
 import BaseButton from "../ui/BaseButton";
 import {takeServices} from "../../modules/base/takeServices";
 import AppMessage from "../app/AppMessage";
+import {Group} from "../../modules/group/Group";
 
 export async function loader({params}: any) {
   return {
@@ -15,11 +16,15 @@ export async function loader({params}: any) {
 export default function GroupMessages() {
   const ld = useLoaderData() as any;
   const messages: Message[] = useSelector((state: any) => state.messages.messages)
+  const groupItems: Group[] = useSelector((state: any) => state.groups.groups)
   const groupMessages = useMemo(() => {
     return messages.filter((message: Message) => {
       return message.groupId === ld.id
-    })
+    }).sort((a, b) => b.time - a.time)
   }, [ld.id, messages])
+  const group = useMemo(() => {
+    return groupItems.find((g) => g._id === ld.id)
+  }, [groupItems, ld.id])
 
   const onNewMessage = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,6 +45,9 @@ export default function GroupMessages() {
   }
 
   return (<div className={'flex flex-col flex-grow'}>
+    <div className={'p-3 bg-navbar text-center mb-2'}>
+      {group?.name ?? 'Группа не найдена'}
+    </div>
     {groupMessages && !groupMessages.length ? 'Нет сообщений' : ''}
     {groupMessages ? groupMessages.map(message => (
       <div key={message._id} className={'mb-2'}>
