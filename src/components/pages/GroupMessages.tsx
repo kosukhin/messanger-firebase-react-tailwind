@@ -3,11 +3,13 @@ import {Message} from "../../modules/message/Message";
 import {useSelector} from "react-redux";
 import {FormEvent, useMemo} from "react";
 import BaseButton from "../ui/BaseButton";
-import {takeServices} from "../../modules/base/takeServices";
 import AppMessage from "../app/AppMessage";
 import {Group} from "../../modules/group/Group";
-import {takeInstance} from "../../modules/base/I";
+import {takeInstance, takeService} from "../../modules/base/I";
 import {StoreCommit} from "../../modules/store/StoreCommit";
+import {GroupService} from "../../modules/group/GroupService";
+import {StoreCommitService} from "../../modules/store/StoreCommitService";
+import {ProfileService} from "../../modules/profile/ProfileService";
 
 export async function loader({params}: any) {
   return {
@@ -30,7 +32,7 @@ export default function GroupMessages() {
 
   const onNewMessage = async (e: FormEvent) => {
     e.preventDefault();
-    const {profile} = takeServices()
+    const profile = takeService(ProfileService)
     const formData = new FormData(e.target as HTMLFormElement)
     const area = document.querySelector('[name="text"]') as HTMLTextAreaElement
     area.value = ''
@@ -40,7 +42,8 @@ export default function GroupMessages() {
     )
   }
 
-  const {groups, storeCommit} = takeServices()
+  const groups = takeService(GroupService)
+  const storeCommit = takeService(StoreCommitService)
   const onDeleteGroup = async (e: Event) => {
     e.preventDefault();
     await groups.crud.deleteById(ld.id, async () => {

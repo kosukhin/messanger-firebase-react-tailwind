@@ -1,11 +1,13 @@
 import BaseButton from "../ui/BaseButton";
 import {Message} from "../../modules/message/Message";
-import {takeServices} from "../../modules/base/takeServices";
 import {User} from "../../modules/user/User";
 import {useSelector} from "react-redux";
 import {useEffect, useMemo, useState} from "react";
-import {takeInstance} from "../../modules/base/I";
+import {takeInstance, takeService} from "../../modules/base/I";
 import {StoreCommit} from "../../modules/store/StoreCommit";
+import {UserService} from "../../modules/user/UserService";
+import {MessageService} from "../../modules/message/MessageService";
+import {StoreCommitService} from "../../modules/store/StoreCommitService";
 
 export default function AppMessage(props: any) {
   const users: User[] = useSelector((state: any) => {
@@ -21,13 +23,14 @@ export default function AppMessage(props: any) {
   const [user, setUser] = useState(takeInstance(User, '', '', '', ''))
 
   useEffect(() => {
-    const {users} = takeServices()
+    const users = takeService(UserService)
     users.currentUser().then(user => {
       setUser(user)
     })
   }, [])
 
-  const {messages, storeCommit} = takeServices()
+  const messages = takeService(MessageService)
+  const storeCommit = takeService(StoreCommitService)
 
   const messagesAll: Message[] = useSelector((state: any) => state.messages.messages)
   const onDelete = (id: string) => async () => {

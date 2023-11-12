@@ -1,12 +1,11 @@
 import {User} from "../../modules/user/User";
 import BaseButton from "../ui/BaseButton";
 import {FormEvent, useEffect, useState} from "react";
-import {takeServices} from "../../modules/base/takeServices";
-import {takeInstance} from "../../modules/base/I";
+import {takeInstance, takeService} from "../../modules/base/I";
+import {UserService} from "../../modules/user/UserService";
 
 export default function Profile() {
-  const {users} = takeServices()
-  const avatar = User.defaultAvatar;
+  const users = takeService(UserService)
   const [user, setUser] = useState(takeInstance(User, '', '', '', ''))
 
   useEffect(() => {

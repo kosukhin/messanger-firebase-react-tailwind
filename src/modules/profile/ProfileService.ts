@@ -1,14 +1,16 @@
 import {BaseService} from "../base/BaseService";
-import {takeInstance} from "../base/I";
+import {takeInstance, takeService} from "../base/I";
 import {Cookies} from "../browser/Cookies";
 import {Profile} from "./Profile";
 import {Hash} from "../security/Hash";
 import {Firebase} from "../firebase/Firebase";
-import {takeServices} from "../base/takeServices";
+import {FirebaseService} from "../firebase/FirebaseService";
+import {CookiesService} from "../browser/CookiesService";
+import {HashService} from "../security/HashService";
 
 export class ProfileService extends BaseService {
   userId() {
-    const {cookies} = takeServices()
+    const cookies = takeService(CookiesService)
     return cookies.apply<Cookies>(takeInstance(Cookies, Profile.cookieIdKey))
   }
 
@@ -16,7 +18,8 @@ export class ProfileService extends BaseService {
     const cookieUid = await this.userId();
 
     if (!cookieUid.value) {
-      const {cookies, hash} = takeServices();
+      const cookies = takeService(CookiesService)
+      const hash = takeService(HashService)
       const uid = await hash.apply<Hash>(takeInstance(Hash, Hash.hashUuid))
       await cookies.apply(cookieUid.takeChanged({
         value: uid.value,
@@ -30,7 +33,7 @@ export class ProfileService extends BaseService {
     text: string,
     groupId: string
   ) {
-    const {firebase} = takeServices();
+    const firebase = takeService(FirebaseService)
     const fromId = await this.userId()
     const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'add', 'messages', {
       groupId,
