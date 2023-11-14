@@ -1,4 +1,4 @@
-import {takeInstance} from "../base/I";
+import {instance} from "../base/I";
 import {Cookies} from "../browser/Cookies";
 import {Profile} from "./Profile";
 import {Hash} from "../security/Hash";
@@ -9,14 +9,14 @@ import {hashService} from "../security/HashService";
 
 export namespace profileService {
   export function userId() {
-    return cookieService.apply<Cookies>(takeInstance(Cookies, Profile.cookieIdKey))
+    return cookieService.apply(instance(Cookies, Profile.cookieIdKey))
   }
 
   export async function initProfile() {
     const cookieUid = await userId();
 
     if (!cookieUid.value) {
-      const uid = await hashService.apply<Hash>(takeInstance(Hash, Hash.hashUuid))
+      const uid = await hashService.apply(instance(Hash, Hash.hashUuid))
       await cookieService.apply(cookieUid.takeChanged({
         value: uid.value,
         operation: 'w',
@@ -30,7 +30,7 @@ export namespace profileService {
     groupId: string
   ) {
     const fromId = await userId()
-    const result = await firebaseService.apply<Firebase>(takeInstance(Firebase, 'add', 'messages', {
+    const result = await firebaseService.apply(instance(Firebase, 'add', 'messages', {
       groupId,
       fromId: String(fromId.value),
       text,

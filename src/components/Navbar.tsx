@@ -3,7 +3,7 @@ import {Group} from "../modules/group/Group";
 import BaseButton from "./ui/BaseButton";
 import {FormEvent} from "react";
 import {Hash} from "../modules/security/Hash";
-import {takeInstance} from "../modules/base/I";
+import {instance} from "../modules/base/I";
 import {hashService} from "../modules/security/HashService";
 import {groupService} from "../modules/group/GroupService";
 
@@ -12,7 +12,7 @@ function Navbar() {
 
   const onSave = async (e: FormEvent) => {
     e.preventDefault();
-    const id = await hashService.apply<Hash>(takeInstance(Hash, Hash.hashUuid));
+    const id = await hashService.apply(instance(Hash, Hash.hashUuid));
     const formData = new FormData(e.target as HTMLFormElement)
     await groupService.crud.create({
       id: id.value,

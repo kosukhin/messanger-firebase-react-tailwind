@@ -3,7 +3,7 @@ import {Message} from "../../modules/message/Message";
 import {User} from "../../modules/user/User";
 import {useSelector} from "react-redux";
 import {useEffect, useMemo, useState} from "react";
-import {takeInstance} from "../../modules/base/I";
+import {instance} from "../../modules/base/I";
 import {StoreCommit} from "../../modules/store/StoreCommit";
 import {messageService} from "../../modules/message/MessageService";
 import {userService} from "../../modules/user/UserService";
@@ -20,7 +20,7 @@ export default function AppMessage(props: any) {
     }, {})
   }, [users])
   const message: Message = props.message
-  const [user, setUser] = useState(takeInstance(User, '', '', '', ''))
+  const [user, setUser] = useState(instance(User, '', '', '', ''))
 
   useEffect(() => {
     userService.currentUser().then(user => {
@@ -35,7 +35,7 @@ export default function AppMessage(props: any) {
         return;
       }
 
-      await storeCommitService.apply(takeInstance(
+      await storeCommitService.apply(instance(
         StoreCommit,
         'setMessages',
         []

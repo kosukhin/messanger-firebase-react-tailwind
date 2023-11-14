@@ -1,6 +1,6 @@
 import {User} from "./User";
 import {firebaseService} from "../firebase/FirebaseService";
-import {takeInstance} from "../base/I";
+import {instance} from "../base/I";
 import {Firebase} from "../firebase/Firebase";
 import {Message} from "../message/Message";
 import {StoreCommit} from "../store/StoreCommit";
@@ -16,7 +16,7 @@ export namespace userService {
     const existedUser = await crud.getById(userId)
 
     if (existedUser) {
-      return takeInstance(
+      return instance(
         User,
         existedUser.id,
         existedUser.id,
@@ -25,7 +25,7 @@ export namespace userService {
       )
     }
 
-    return takeInstance(
+    return instance(
       User,
       userId,
       userId,
@@ -35,9 +35,9 @@ export namespace userService {
   }
 
   export async function watchUsers() {
-    await firebaseService.apply(takeInstance(Firebase, 'onCollection', User.collectionName, {
+    await firebaseService.apply(instance(Firebase, 'onCollection', User.collectionName, {
       async onData(data: Message[]) {
-        await storeCommitService.apply(takeInstance(
+        await storeCommitService.apply(instance(
           StoreCommit,
           'setUsers',
           data

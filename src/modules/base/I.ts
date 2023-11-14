@@ -12,7 +12,7 @@ export type ConstructorResult<T> = T extends {
   ? U
   : never
 
-export function takeInstance<T extends { new(...args: any[]): any }>(
+export function instance<T extends { new(...args: any[]): any }>(
   constructorFunction: T,
   ...args: ConstructorProps<T>
 ): ConstructorResult<T> {
@@ -23,8 +23,8 @@ export function takeInstance<T extends { new(...args: any[]): any }>(
 type applierFn<T extends any> = (model: any, ...args: any) => Promise<T> | T
 const appliers = new Map();
 
-export function createApplier(id: any) {
-  return <T extends any>(model: BaseModel, ...args: any): Promise<T> => {
+export function createApplier<U extends any>(id: any) {
+  return <T = undefined>(model: BaseModel, ...args: any): Promise<T extends undefined ? U : T> => {
     const applier = appliers.get(id)
 
     if (!applier) {

@@ -5,7 +5,7 @@ import {FormEvent, useMemo} from "react";
 import BaseButton from "../ui/BaseButton";
 import AppMessage from "../app/AppMessage";
 import {Group} from "../../modules/group/Group";
-import {takeInstance} from "../../modules/base/I";
+import {instance} from "../../modules/base/I";
 import {StoreCommit} from "../../modules/store/StoreCommit";
 import {groupService} from "../../modules/group/GroupService";
 import {storeCommitService} from "../../modules/store/StoreCommitService";
@@ -48,7 +48,7 @@ export default function GroupMessages() {
         return;
       }
 
-      await storeCommitService.apply(takeInstance(
+      await storeCommitService.apply(instance(
         StoreCommit,
         'setGroups',
         []
