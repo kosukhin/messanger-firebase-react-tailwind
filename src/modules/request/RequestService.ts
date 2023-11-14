@@ -1,9 +1,6 @@
-import {BaseService} from "../base/BaseService";
-import {takeInstance} from "../base/I";
-import {RequestRepository} from "./RequestRepository";
+import {createApplier} from "../base/I";
 
-export class RequestService extends BaseService {
-  repositories = [
-    takeInstance(RequestRepository)
-  ]
+export namespace requestService {
+  export const applierId = Symbol()
+  export const apply = createApplier(applierId)
 }

@@ -5,11 +5,11 @@ import {FormEvent, useMemo} from "react";
 import BaseButton from "../ui/BaseButton";
 import AppMessage from "../app/AppMessage";
 import {Group} from "../../modules/group/Group";
-import {takeInstance, takeService} from "../../modules/base/I";
+import {takeInstance} from "../../modules/base/I";
 import {StoreCommit} from "../../modules/store/StoreCommit";
-import {GroupService} from "../../modules/group/GroupService";
-import {StoreCommitService} from "../../modules/store/StoreCommitService";
-import {ProfileService} from "../../modules/profile/ProfileService";
+import {groupService} from "../../modules/group/GroupService";
+import {storeCommitService} from "../../modules/store/StoreCommitService";
+import {profileService} from "../../modules/profile/ProfileService";
 
 export async function loader({params}: any) {
   return {
@@ -32,26 +32,23 @@ export default function GroupMessages() {
 
   const onNewMessage = async (e: FormEvent) => {
     e.preventDefault();
-    const profile = takeService(ProfileService)
     const formData = new FormData(e.target as HTMLFormElement)
     const area = document.querySelector('[name="text"]') as HTMLTextAreaElement
     area.value = ''
-    await profile.createMessage(
+    await profileService.createMessage(
       String(formData.get('text')),
       ld.id,
     )
   }
 
-  const groups = takeService(GroupService)
-  const storeCommit = takeService(StoreCommitService)
   const onDeleteGroup = async (e: Event) => {
     e.preventDefault();
-    await groups.crud.deleteById(ld.id, async () => {
+    await groupService.crud.deleteById(ld.id, async () => {
       if (groupItems.length !== 1) {
         return;
       }
 
-      await storeCommit.apply(takeInstance(
+      await storeCommitService.apply(takeInstance(
         StoreCommit,
         'setGroups',
         []

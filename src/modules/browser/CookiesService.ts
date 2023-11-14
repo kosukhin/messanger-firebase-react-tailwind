@@ -1,9 +1,6 @@
-import {BaseService} from "../base/BaseService";
-import {takeInstance} from "../base/I";
-import {CookiesRepository} from "./CookiesRepository";
+import {createApplier} from "../base/I";
 
-export class CookiesService extends BaseService {
-  repositories = [
-    takeInstance(CookiesRepository)
-  ]
+export namespace cookieService {
+  export const applierId = Symbol()
+  export const apply = createApplier(applierId)
 }

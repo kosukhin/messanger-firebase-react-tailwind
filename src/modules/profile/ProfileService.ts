@@ -1,27 +1,23 @@
-import {BaseService} from "../base/BaseService";
-import {takeInstance, takeService} from "../base/I";
+import {takeInstance} from "../base/I";
 import {Cookies} from "../browser/Cookies";
 import {Profile} from "./Profile";
 import {Hash} from "../security/Hash";
 import {Firebase} from "../firebase/Firebase";
-import {FirebaseService} from "../firebase/FirebaseService";
-import {CookiesService} from "../browser/CookiesService";
-import {HashService} from "../security/HashService";
+import {firebaseService} from "../firebase/FirebaseService";
+import {cookieService} from "../browser/CookiesService";
+import {hashService} from "../security/HashService";
 
-export class ProfileService extends BaseService {
-  userId() {
-    const cookies = takeService(CookiesService)
-    return cookies.apply<Cookies>(takeInstance(Cookies, Profile.cookieIdKey))
+export namespace profileService {
+  export function userId() {
+    return cookieService.apply<Cookies>(takeInstance(Cookies, Profile.cookieIdKey))
   }
 
-  async initProfile() {
-    const cookieUid = await this.userId();
+  export async function initProfile() {
+    const cookieUid = await userId();
 
     if (!cookieUid.value) {
-      const cookies = takeService(CookiesService)
-      const hash = takeService(HashService)
-      const uid = await hash.apply<Hash>(takeInstance(Hash, Hash.hashUuid))
-      await cookies.apply(cookieUid.takeChanged({
+      const uid = await hashService.apply<Hash>(takeInstance(Hash, Hash.hashUuid))
+      await cookieService.apply(cookieUid.takeChanged({
         value: uid.value,
         operation: 'w',
         timeout: Profile.cookieLifeTime
@@ -29,13 +25,12 @@ export class ProfileService extends BaseService {
     }
   }
 
-  async createMessage(
+  export async function createMessage(
     text: string,
     groupId: string
   ) {
-    const firebase = takeService(FirebaseService)
-    const fromId = await this.userId()
-    const result = await firebase.apply<Firebase>(takeInstance(Firebase, 'add', 'messages', {
+    const fromId = await userId()
+    const result = await firebaseService.apply<Firebase>(takeInstance(Firebase, 'add', 'messages', {
       groupId,
       fromId: String(fromId.value),
       text,

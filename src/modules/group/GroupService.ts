@@ -1,26 +1,17 @@
-import {BaseService} from "../base/BaseService";
-import {takeInstance, takeService} from "../base/I";
+import {takeInstance} from "../base/I";
 import {Firebase} from "../firebase/Firebase";
 import {Group} from "./Group";
 import {StoreCommit} from "../store/StoreCommit";
-import {FirebaseCrud, FirebaseService} from "../firebase/FirebaseService";
-import {StoreCommitService} from "../store/StoreCommitService";
+import {firebaseService} from "../firebase/FirebaseService";
+import {storeCommitService} from "../store/StoreCommitService";
 
-export class GroupService extends BaseService {
-  crud: FirebaseCrud<any>
+export namespace groupService {
+  export const crud = firebaseService.buildCrud(Group.collectionName)
 
-  constructor() {
-    super();
-    const firebase = takeService(FirebaseService)
-    this.crud = firebase.buildCrud(Group.collectionName)
-  }
-
-  async watchGroups() {
-    const firebase = takeService(FirebaseService)
-    const storeCommit = takeService(StoreCommitService)
-    await firebase.apply(takeInstance(Firebase, 'onCollection', Group.collectionName, {
+  export async function watchGroups() {
+    await firebaseService.apply(takeInstance(Firebase, 'onCollection', Group.collectionName, {
       async onData(data: Group[]) {
-        await storeCommit.apply(takeInstance(StoreCommit, 'setGroups', data))
+        await storeCommitService.apply(takeInstance(StoreCommit, 'setGroups', data))
       },
     }))
   }

@@ -1,15 +1,14 @@
 import {User} from "../../modules/user/User";
 import BaseButton from "../ui/BaseButton";
 import {FormEvent, useEffect, useState} from "react";
-import {takeInstance, takeService} from "../../modules/base/I";
-import {UserService} from "../../modules/user/UserService";
+import {takeInstance} from "../../modules/base/I";
+import {userService} from "../../modules/user/UserService";
 
 export default function Profile() {
-  const users = takeService(UserService)
   const [user, setUser] = useState(takeInstance(User, '', '', '', ''))
 
   useEffect(() => {
-    users.currentUser().then(user => {
+    userService.currentUser().then(user => {
       setUser(user)
     })
   }, [])
@@ -22,7 +21,7 @@ export default function Profile() {
       avatar: String(formData.get('avatar'))
     })
     console.log(newUser)
-    await users.crud.update(newUser)
+    await userService.crud.update(newUser)
   }
 
   return (<div>

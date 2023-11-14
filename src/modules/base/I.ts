@@ -1,4 +1,4 @@
-import {BaseService} from "./BaseService";
+import {BaseModel} from "./BaseModel";
 
 export type ConstructorProps<T> = T extends {
     new(...args: infer U): any
@@ -20,29 +20,28 @@ export function takeInstance<T extends { new(...args: any[]): any }>(
   return new constructorFunction(...args);
 }
 
-const singletons: any = {};
+type applierFn<T extends any> = (model: any, ...args: any) => Promise<T> | T
+const appliers = new Map();
 
-export function takeSingleton<T extends { new(...args: any[]): any }>(
-  constructorFunction: T,
-  ...args: ConstructorProps<T> | []
-): ConstructorResult<T> {
-  if (singletons[constructorFunction.name]) {
-    return singletons[constructorFunction.name];
+export function createApplier(id: any) {
+  return <T extends any>(model: BaseModel, ...args: any): Promise<T> => {
+    const applier = appliers.get(id)
+
+    if (!applier) {
+      throw new Error(`No applier for model ${model.constructor.name}`)
+    }
+
+    const result = applier(model, ...args)
+
+    if (!(result instanceof Promise)) {
+      return Promise.resolve(result)
+    }
+
+    return result;
   }
-  // eslint-disable-next-line new-cap
-  singletons[constructorFunction.name] = new constructorFunction(...args);
-  return singletons[constructorFunction.name];
 }
 
-export function takeService<T extends { new(...args: any[]): any }>(
-  constructorFunction: T
-): ConstructorResult<T> {
-  const instance: any = takeSingleton(constructorFunction)
-
-  if (!(instance instanceof BaseService)) {
-    throw new TypeError('Cant create service')
-  }
-
-  return instance.setup() as ConstructorResult<T>
+export function registerApplier(id: any, applier: applierFn<any>) {
+  appliers.set(id, applier)
 }
 

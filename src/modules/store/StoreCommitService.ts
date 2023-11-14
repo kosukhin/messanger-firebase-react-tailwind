@@ -1,9 +1,6 @@
-import {BaseService} from "../base/BaseService";
-import {takeInstance} from "../base/I";
-import {StoreCommitRepository} from "./StoreCommitRepository";
+import {createApplier} from "../base/I";
 
-export class StoreCommitService extends BaseService {
-  repositories = [
-    takeInstance(StoreCommitRepository)
-  ]
+export namespace storeCommitService {
+  export const applierId = Symbol()
+  export const apply = createApplier(applierId)
 }

@@ -1,9 +1,6 @@
-import {BaseService} from "../base/BaseService";
-import {takeInstance} from "../base/I";
-import {HashRepository} from "./HashRepository";
+import {createApplier} from "../base/I";
 
-export class HashService extends BaseService {
-  repositories = [
-    takeInstance(HashRepository)
-  ]
+export namespace hashService {
+  export const applierId = Symbol()
+  export const apply = createApplier(applierId)
 }

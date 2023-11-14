@@ -1,0 +1,5 @@
+import './CookiesRepository'
+import './FirebaseRepository'
+import './HashRepository'
+import './RequestRepository'
+import './StoreCommitRepository'
