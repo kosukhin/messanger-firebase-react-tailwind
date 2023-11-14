@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/kosukhin/weather-app/compare/v0.1.4...v0.1.5) (2023-11-14)
+
+
+### Features
+
+* **main:** Отрефакторить и убрать takeServices ([f116c7d](https://github.com/kosukhin/weather-app/commit/f116c7ddcee1c6cee18716ae45c02199036ddb07))
+* **main:** Переосмыслить реализацию сервисов ([c264a1c](https://github.com/kosukhin/weather-app/commit/c264a1ccbc9927652d4bdefa35e4f5a8396fd680))
+
 ### [0.1.4](https://github.com/kosukhin/weather-app/compare/v0.1.3...v0.1.4) (2023-11-12)
 
 ### [0.1.3](https://github.com/kosukhin/weather-app/compare/v0.1.2...v0.1.3) (2023-11-11)
