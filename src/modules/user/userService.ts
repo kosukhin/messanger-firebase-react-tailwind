@@ -1,11 +1,12 @@
 import {User} from "./User";
-import {firebaseService} from "../firebase/FirebaseService";
-import {instance} from "../base/I";
+import {firebaseService} from "../firebase/firebaseService";
+import {create} from "../base/I";
 import {Firebase} from "../firebase/Firebase";
 import {Message} from "../message/Message";
 import {StoreCommit} from "../store/StoreCommit";
-import {profileService} from "../profile/ProfileService";
-import {storeCommitService} from "../store/StoreCommitService";
+import {profileService} from "../profile/profileService";
+import {firebaseEffect} from "../firebase/firebaseEffect";
+import {storeCommitEffect} from "../store/storeCommitEffect";
 
 export namespace userService {
   export const crud = firebaseService.buildCrud(User.collectionName)
@@ -16,7 +17,7 @@ export namespace userService {
     const existedUser = await crud.getById(userId)
 
     if (existedUser) {
-      return instance(
+      return create(
         User,
         existedUser.id,
         existedUser.id,
@@ -25,7 +26,7 @@ export namespace userService {
       )
     }
 
-    return instance(
+    return create(
       User,
       userId,
       userId,
@@ -35,9 +36,9 @@ export namespace userService {
   }
 
   export async function watchUsers() {
-    await firebaseService.apply(instance(Firebase, 'onCollection', User.collectionName, {
+    await firebaseEffect(create(Firebase, 'onCollection', User.collectionName, {
       async onData(data: Message[]) {
-        await storeCommitService.apply(instance(
+        await storeCommitEffect(create(
           StoreCommit,
           'setUsers',
           data

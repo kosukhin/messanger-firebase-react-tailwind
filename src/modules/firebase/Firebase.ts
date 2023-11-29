@@ -1,8 +1,6 @@
-import {BaseModel} from "../base/BaseModel";
-
 type FirebaseActions = 'add' | 'update' | 'remove' | 'get' | 'list' | 'onCollection' | 'onDocument'
 
-export class Firebase extends BaseModel {
+export class Firebase {
   constructor(
     readonly action: FirebaseActions,
     readonly collection: string,
@@ -11,6 +9,5 @@ export class Firebase extends BaseModel {
     readonly isDone = false,
     readonly result: any = null
   ) {
-    super();
   }
 }

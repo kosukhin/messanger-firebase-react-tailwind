@@ -1,12 +1,9 @@
-import {BaseModel} from "../base/BaseModel";
-
-export class Hash extends BaseModel {
+export class Hash {
   static hashUuid = 'uuid';
 
   constructor(
     readonly type: string = Hash.hashUuid,
     readonly value: string = ''
   ) {
-    super();
   }
 }

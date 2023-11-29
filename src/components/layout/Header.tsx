@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import {instance} from "../../modules/base/I";
+import {create} from "../../modules/base/I";
 import {User} from "../../modules/user/User";
-import {userService} from "../../modules/user/UserService";
+import {userService} from "../../modules/user/userService";
 
 function Header() {
-  const [user, setUser] = useState(instance(User, '', '', '', ''))
+  const [user, setUser] = useState(create(User, '', '', '', ''))
 
   useEffect(() => {
     userService.currentUser().then(user => {

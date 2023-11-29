@@ -1,7 +1,4 @@
-import {BaseModel} from "../base/BaseModel";
-
-export class Profile extends BaseModel {
+export class Profile {
   static cookieIdKey = 'uid';
   static cookieLifeTime = 68000;
-
 }

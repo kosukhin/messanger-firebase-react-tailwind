@@ -1,7 +1,4 @@
-import {BaseModel} from "../base/BaseModel";
-
-export class StoreCommit extends BaseModel {
+export class StoreCommit {
   constructor(readonly action: string, readonly payload?: any) {
-    super();
   }
 }

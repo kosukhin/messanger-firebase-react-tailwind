@@ -1,11 +1,11 @@
 import {User} from "../../modules/user/User";
 import BaseButton from "../ui/BaseButton";
 import {FormEvent, useEffect, useState} from "react";
-import {instance} from "../../modules/base/I";
-import {userService} from "../../modules/user/UserService";
+import {change, create} from "../../modules/base/I";
+import {userService} from "../../modules/user/userService";
 
 export default function Profile() {
-  const [user, setUser] = useState(instance(User, '', '', '', ''))
+  const [user, setUser] = useState(create(User, '', '', '', ''))
 
   useEffect(() => {
     userService.currentUser().then(user => {
@@ -16,11 +16,10 @@ export default function Profile() {
   const onSave = async (e: FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement)
-    const newUser = user.takeChanged({
+    const newUser = change(user, {
       name: String(formData.get('name')),
       avatar: String(formData.get('avatar'))
     })
-    console.log(newUser)
     await userService.crud.update(newUser)
   }
 

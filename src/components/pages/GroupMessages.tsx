@@ -5,11 +5,11 @@ import {FormEvent, useMemo} from "react";
 import BaseButton from "../ui/BaseButton";
 import AppMessage from "../app/AppMessage";
 import {Group} from "../../modules/group/Group";
-import {instance} from "../../modules/base/I";
+import {create} from "../../modules/base/I";
 import {StoreCommit} from "../../modules/store/StoreCommit";
-import {groupService} from "../../modules/group/GroupService";
-import {storeCommitService} from "../../modules/store/StoreCommitService";
-import {profileService} from "../../modules/profile/ProfileService";
+import {groupService} from "../../modules/group/groupService";
+import {profileService} from "../../modules/profile/profileService";
+import {storeCommitEffect} from "../../modules/store/storeCommitEffect";
 
 export async function loader({params}: any) {
   return {
@@ -48,7 +48,7 @@ export default function GroupMessages() {
         return;
       }
 
-      await storeCommitService.apply(instance(
+      await storeCommitEffect(create(
         StoreCommit,
         'setGroups',
         []

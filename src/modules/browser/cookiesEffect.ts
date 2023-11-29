@@ -1,12 +1,11 @@
-import SystemCookies from 'js-cookie';
-import {registerApplier} from "../modules/base/I";
-import {cookieService} from "../modules/browser/CookiesService";
-import {Cookies} from "../modules/browser/Cookies";
+import {Cookies} from "./Cookies";
+import SystemCookies from "js-cookie";
+import {change} from "../base/I";
 
-registerApplier(cookieService.applierId, (model: Cookies) => {
+export async function cookiesEffect(model: Cookies) {
   if (model.operation === 'r') {
     const cookie = SystemCookies.get(model.key)
-    return model.takeChanged({
+    return change(model, {
       value: cookie
     })
   }
@@ -22,4 +21,4 @@ registerApplier(cookieService.applierId, (model: Cookies) => {
   }
 
   return model;
-})
+}

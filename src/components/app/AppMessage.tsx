@@ -3,11 +3,11 @@ import {Message} from "../../modules/message/Message";
 import {User} from "../../modules/user/User";
 import {useSelector} from "react-redux";
 import {useEffect, useMemo, useState} from "react";
-import {instance} from "../../modules/base/I";
+import {create} from "../../modules/base/I";
 import {StoreCommit} from "../../modules/store/StoreCommit";
-import {messageService} from "../../modules/message/MessageService";
-import {userService} from "../../modules/user/UserService";
-import {storeCommitService} from "../../modules/store/StoreCommitService";
+import {messageService} from "../../modules/message/messageService";
+import {userService} from "../../modules/user/userService";
+import {storeCommitEffect} from "../../modules/store/storeCommitEffect";
 
 export default function AppMessage(props: any) {
   const users: User[] = useSelector((state: any) => {
@@ -20,7 +20,7 @@ export default function AppMessage(props: any) {
     }, {})
   }, [users])
   const message: Message = props.message
-  const [user, setUser] = useState(instance(User, '', '', '', ''))
+  const [user, setUser] = useState(create(User, '', '', '', ''))
 
   useEffect(() => {
     userService.currentUser().then(user => {
@@ -35,7 +35,7 @@ export default function AppMessage(props: any) {
         return;
       }
 
-      await storeCommitService.apply(instance(
+      await storeCommitEffect(create(
         StoreCommit,
         'setMessages',
         []

@@ -3,16 +3,16 @@ import {Group} from "../modules/group/Group";
 import BaseButton from "./ui/BaseButton";
 import {FormEvent} from "react";
 import {Hash} from "../modules/security/Hash";
-import {instance} from "../modules/base/I";
-import {hashService} from "../modules/security/HashService";
-import {groupService} from "../modules/group/GroupService";
+import {create} from "../modules/base/I";
+import {groupService} from "../modules/group/groupService";
+import {hashEffect} from "../modules/security/hashEffect";
 
 function Navbar() {
   const groups: Group[] = useSelector((state: any) => state.groups.groups)
 
   const onSave = async (e: FormEvent) => {
     e.preventDefault();
-    const id = await hashService.apply(instance(Hash, Hash.hashUuid));
+    const id = await hashEffect(create(Hash, Hash.hashUuid));
     const formData = new FormData(e.target as HTMLFormElement)
     await groupService.crud.create({
       id: id.value,

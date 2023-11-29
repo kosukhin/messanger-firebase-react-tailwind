@@ -1,6 +1,4 @@
-import {BaseModel} from "../base/BaseModel";
-
-export class Group extends BaseModel {
+export class Group {
   static collectionName = 'groups'
 
   constructor(
@@ -8,6 +6,5 @@ export class Group extends BaseModel {
     readonly id: string,
     readonly name: string
   ) {
-    super();
   }
 }

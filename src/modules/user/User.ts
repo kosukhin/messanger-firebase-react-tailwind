@@ -1,6 +1,4 @@
-import {BaseModel} from "../base/BaseModel";
-
-export class User extends BaseModel {
+export class User {
   static collectionName = 'users';
   static defaultName = 'Аноним';
   static defaultAvatar = 'https://i.pravatar.cc/300';
@@ -11,6 +9,5 @@ export class User extends BaseModel {
     readonly name: string,
     readonly avatar: string
   ) {
-    super();
   }
 }

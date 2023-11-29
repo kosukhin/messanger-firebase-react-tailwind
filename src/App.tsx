@@ -3,10 +3,10 @@ import './assets/index.css'
 import Header from "./components/layout/Header";
 import Body from "./components/layout/Body";
 import Footer from "./components/layout/Footer";
-import {groupService} from "./modules/group/GroupService";
-import {messageService} from "./modules/message/MessageService";
-import {profileService} from "./modules/profile/ProfileService";
-import {userService} from "./modules/user/UserService";
+import {groupService} from "./modules/group/groupService";
+import {messageService} from "./modules/message/messageService";
+import {profileService} from "./modules/profile/profileService";
+import {userService} from "./modules/user/userService";
 
 function App() {
   useEffect(() => {

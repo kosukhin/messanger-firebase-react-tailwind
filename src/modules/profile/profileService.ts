@@ -1,23 +1,23 @@
-import {instance} from "../base/I";
+import {change, create} from "../base/I";
 import {Cookies} from "../browser/Cookies";
 import {Profile} from "./Profile";
 import {Hash} from "../security/Hash";
 import {Firebase} from "../firebase/Firebase";
-import {firebaseService} from "../firebase/FirebaseService";
-import {cookieService} from "../browser/CookiesService";
-import {hashService} from "../security/HashService";
+import {cookiesEffect} from "../browser/cookiesEffect";
+import {firebaseEffect} from "../firebase/firebaseEffect";
+import {hashEffect} from "../security/hashEffect";
 
 export namespace profileService {
   export function userId() {
-    return cookieService.apply(instance(Cookies, Profile.cookieIdKey))
+    return cookiesEffect(create(Cookies, Profile.cookieIdKey))
   }
 
   export async function initProfile() {
     const cookieUid = await userId();
 
     if (!cookieUid.value) {
-      const uid = await hashService.apply(instance(Hash, Hash.hashUuid))
-      await cookieService.apply(cookieUid.takeChanged({
+      const uid = await hashEffect(create(Hash, Hash.hashUuid))
+      await cookiesEffect(change(cookieUid, {
         value: uid.value,
         operation: 'w',
         timeout: Profile.cookieLifeTime
@@ -30,7 +30,7 @@ export namespace profileService {
     groupId: string
   ) {
     const fromId = await userId()
-    const result = await firebaseService.apply(instance(Firebase, 'add', 'messages', {
+    const result = await firebaseEffect(create(Firebase, 'add', 'messages', {
       groupId,
       fromId: String(fromId.value),
       text,

@@ -1,6 +1,4 @@
-import {BaseModel} from "../base/BaseModel";
-
-export class Message extends BaseModel {
+export class Message {
   static collectionName = 'messages'
 
   constructor(
@@ -10,6 +8,5 @@ export class Message extends BaseModel {
     readonly fromId: string,
     readonly time: number
   ) {
-    super();
   }
 }

@@ -1,3 +1,4 @@
+import {Firebase} from "./Firebase";
 import {
   addDoc,
   collection,
@@ -12,9 +13,7 @@ import {
   where
 } from "firebase/firestore";
 import {initializeApp} from "firebase/app";
-import {registerApplier} from "../modules/base/I";
-import {firebaseService} from "../modules/firebase/FirebaseService";
-import {Firebase} from "../modules/firebase/Firebase";
+import {change} from "../base/I";
 
 initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -23,7 +22,7 @@ initializeApp({
 });
 const db = getFirestore();
 
-registerApplier(firebaseService.applierId, async (model: Firebase) => {
+export async function firebaseEffect(model: Firebase) {
   if (model.action === 'add') {
     const addResult = await addDoc(
       collection(
@@ -32,7 +31,7 @@ registerApplier(firebaseService.applierId, async (model: Firebase) => {
       ),
       model.data
     );
-    model = model.takeChanged({
+    model = change(model, {
       isDone: true,
       result: addResult
     })
@@ -42,7 +41,7 @@ registerApplier(firebaseService.applierId, async (model: Firebase) => {
     const {_id, ...data} = model.data
     const result = doc(db, model.collection, _id);
     const updateResult = await setDoc(result, data);
-    return model.takeChanged({
+    return change(model, {
       isDone: true,
       result: updateResult
     })
@@ -54,7 +53,7 @@ registerApplier(firebaseService.applierId, async (model: Firebase) => {
     if (model.data.onDelete) {
       model.data.onDelete();
     }
-    return model.takeChanged({
+    return change(model, {
       result: deletionResult
     })
   }
@@ -62,7 +61,7 @@ registerApplier(firebaseService.applierId, async (model: Firebase) => {
   if (model.action === 'get') {
     const result = doc(db, model.collection, model.data.id);
     const docSnap = await getDoc(result);
-    return model.takeChanged({
+    return change(model, {
       result: docSnap.data()
     })
   }
@@ -79,7 +78,7 @@ registerApplier(firebaseService.applierId, async (model: Firebase) => {
     const querySnapshot = await getDocs(q);
     const result = await getShapshotResults(querySnapshot as any)
 
-    return model.takeChanged({
+    return change(model, {
       result
     })
   }
@@ -108,7 +107,7 @@ registerApplier(firebaseService.applierId, async (model: Firebase) => {
   }
 
   return model;
-})
+}
 
 async function getShapshotResults(shapshot: any) {
   return await (new Promise((resolve, reject) => {
