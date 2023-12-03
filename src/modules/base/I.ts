@@ -1,26 +1,13 @@
-export type ConstructorProps<T> = T extends {
-    new(...args: infer U): any
+// TODO тут нужно придумать правильную типизацию для required
+export function defineModelFactory<T>(defaults: Partial<T> = {}) {
+  return (
+    required: Partial<T> = {},
+    changed: Partial<T> = {}
+  ): T => {
+    return {
+      ...defaults,
+      ...required,
+      ...changed
+    } as T
   }
-  ? U
-  : never
-
-export type ConstructorResult<T> = T extends {
-    new(...args: any): infer U
-  }
-  ? U
-  : never
-
-export function create<T extends { new(...args: any[]): any }>(
-  constructorFunction: T,
-  ...args: ConstructorProps<T>
-): ConstructorResult<T> {
-  // eslint-disable-next-line new-cap
-  return new constructorFunction(...args);
-}
-
-export function change<T extends object>(
-  model: T,
-  fields: Partial<T>
-): T {
-  return Object.assign({...model}, fields)
 }

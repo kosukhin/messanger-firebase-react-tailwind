@@ -1,15 +1,14 @@
 import {useLoaderData} from "react-router-dom";
-import {Message} from "../../modules/message/Message";
+import {MessageModel} from "../../modules/message/MessageModel";
 import {useSelector} from "react-redux";
 import {FormEvent, useMemo} from "react";
 import BaseButton from "../ui/BaseButton";
 import AppMessage from "../app/AppMessage";
-import {Group} from "../../modules/group/Group";
-import {create} from "../../modules/base/I";
-import {StoreCommit} from "../../modules/store/StoreCommit";
+import {GroupModel} from "../../modules/group/GroupModel";
+import {storeCommitModel} from "../../modules/store/StoreCommitModel";
 import {groupService} from "../../modules/group/groupService";
 import {profileService} from "../../modules/profile/profileService";
-import {storeCommitEffect} from "../../modules/store/storeCommitEffect";
+import {storeCommit} from "../../modules/store/storeCommit";
 
 export async function loader({params}: any) {
   return {
@@ -19,10 +18,10 @@ export async function loader({params}: any) {
 
 export default function GroupMessages() {
   const ld = useLoaderData() as any;
-  const messages: Message[] = useSelector((state: any) => state.messages.messages)
-  const groupItems: Group[] = useSelector((state: any) => state.groups.groups)
+  const messages: MessageModel[] = useSelector((state: any) => state.messages.messages)
+  const groupItems: GroupModel[] = useSelector((state: any) => state.groups.groups)
   const groupMessages = useMemo(() => {
-    return messages.filter((message: Message) => {
+    return messages.filter((message: MessageModel) => {
       return message.groupId === ld.id
     }).sort((a, b) => a.time - b.time)
   }, [ld.id, messages])
@@ -48,11 +47,10 @@ export default function GroupMessages() {
         return;
       }
 
-      await storeCommitEffect(create(
-        StoreCommit,
-        'setGroups',
-        []
-      ))
+      await storeCommit(storeCommitModel({
+        action: 'setGroups',
+        payload: []
+      }))
     })
   }
 

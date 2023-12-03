@@ -1,4 +1,6 @@
-export class User {
+import {defineModelFactory} from "../base/I";
+
+export class UserModel {
   static collectionName = 'users';
   static defaultName = 'Аноним';
   static defaultAvatar = 'https://i.pravatar.cc/300';
@@ -11,3 +13,5 @@ export class User {
   ) {
   }
 }
+
+export const userModel = defineModelFactory<UserModel>()

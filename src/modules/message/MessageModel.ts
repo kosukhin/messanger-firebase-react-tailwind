@@ -1,4 +1,4 @@
-export class Message {
+export class MessageModel {
   static collectionName = 'messages'
 
   constructor(

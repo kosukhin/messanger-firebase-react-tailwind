@@ -1,23 +1,25 @@
-import {create} from "../base/I";
-import {Firebase} from "../firebase/Firebase";
-import {StoreCommit} from "../store/StoreCommit";
-import {Message} from "./Message";
+import {firebaseModel} from "../firebase/FirebaseModel";
+import {storeCommitModel} from "../store/StoreCommitModel";
+import {MessageModel} from "./MessageModel";
 import {firebaseService} from "../firebase/firebaseService";
-import {firebaseEffect} from "../firebase/firebaseEffect";
-import {storeCommitEffect} from "../store/storeCommitEffect";
+import {firebase} from "../firebase/firebase";
+import {storeCommit} from "../store/storeCommit";
 
 export namespace messageService {
-  export const crud = firebaseService.buildCrud(Message.collectionName)
+  export const crud = firebaseService.buildCrud(MessageModel.collectionName)
 
   export async function watchMessages() {
-    await firebaseEffect(create(Firebase, 'onCollection', Message.collectionName, {
-      async onData(data: Message[]) {
-        await storeCommitEffect(create(
-          StoreCommit,
-          'setMessages',
-          data
-        ))
-      },
+    await firebase(firebaseModel({
+      action: 'onCollection',
+      collection: MessageModel.collectionName,
+      data: {
+        async onData(data: MessageModel[]) {
+          await storeCommit(storeCommitModel({
+            action: 'setMessages',
+            payload: data
+          }))
+        },
+      }
     }))
   }
 }

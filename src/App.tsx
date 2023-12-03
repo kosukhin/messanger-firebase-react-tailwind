@@ -10,10 +10,14 @@ import {userService} from "./modules/user/userService";
 
 function App() {
   useEffect(() => {
-    groupService.watchGroups()
-    messageService.watchMessages()
-    profileService.initProfile()
-    userService.watchUsers()
+    Promise.all([
+      groupService.watchGroups(),
+      messageService.watchMessages(),
+      profileService.initProfile(),
+      userService.watchUsers()
+    ]).catch(e => {
+      throw e
+    })
   }, [])
 
   return (

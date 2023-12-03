@@ -1,26 +1,27 @@
 import BaseButton from "../ui/BaseButton";
-import {Message} from "../../modules/message/Message";
-import {User} from "../../modules/user/User";
+import {MessageModel} from "../../modules/message/MessageModel";
+import {userModel, UserModel} from "../../modules/user/UserModel";
 import {useSelector} from "react-redux";
 import {useEffect, useMemo, useState} from "react";
-import {create} from "../../modules/base/I";
-import {StoreCommit} from "../../modules/store/StoreCommit";
+import {storeCommitModel} from "../../modules/store/StoreCommitModel";
 import {messageService} from "../../modules/message/messageService";
 import {userService} from "../../modules/user/userService";
-import {storeCommitEffect} from "../../modules/store/storeCommitEffect";
+import {storeCommit} from "../../modules/store/storeCommit";
 
 export default function AppMessage(props: any) {
-  const users: User[] = useSelector((state: any) => {
+  const users: UserModel[] = useSelector((state: any) => {
     return state.users.users
   })
   const usersMap = useMemo(() => {
-    return users.reduce((acc: any, item: User) => {
+    return users.reduce((acc: any, item: UserModel) => {
       acc[item.id] = item
       return acc;
     }, {})
   }, [users])
-  const message: Message = props.message
-  const [user, setUser] = useState(create(User, '', '', '', ''))
+  const message: MessageModel = props.message
+  const [user, setUser] = useState(userModel({
+    _id: '', id: '', name: '', avatar: ''
+  }))
 
   useEffect(() => {
     userService.currentUser().then(user => {
@@ -28,18 +29,17 @@ export default function AppMessage(props: any) {
     })
   }, [])
 
-  const messagesAll: Message[] = useSelector((state: any) => state.messages.messages)
+  const messagesAll: MessageModel[] = useSelector((state: any) => state.messages.messages)
   const onDelete = (id: string) => async () => {
     await messageService.crud.deleteById(id, async () => {
       if (messagesAll.length !== 1) {
         return;
       }
 
-      await storeCommitEffect(create(
-        StoreCommit,
-        'setMessages',
-        []
-      ))
+      await storeCommit(storeCommitModel({
+        action: 'setMessages',
+        payload: []
+      }))
     })
   }
 

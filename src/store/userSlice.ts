@@ -1,10 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {User} from "../modules/user/User";
+import {UserModel} from "../modules/user/UserModel";
 
 export const userSlice = createSlice({
   name: 'users',
   initialState: {
-    users: [] as User[]
+    users: [] as UserModel[]
   },
   reducers: {
     setUsers: (state, {payload}) => {

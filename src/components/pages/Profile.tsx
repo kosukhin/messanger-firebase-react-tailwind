@@ -1,11 +1,12 @@
-import {User} from "../../modules/user/User";
 import BaseButton from "../ui/BaseButton";
 import {FormEvent, useEffect, useState} from "react";
-import {change, create} from "../../modules/base/I";
 import {userService} from "../../modules/user/userService";
+import {userModel} from "../../modules/user/UserModel";
 
 export default function Profile() {
-  const [user, setUser] = useState(create(User, '', '', '', ''))
+  const [user, setUser] = useState(userModel({
+    _id: '', id: '', name: '', avatar: ''
+  }))
 
   useEffect(() => {
     userService.currentUser().then(user => {
@@ -16,7 +17,7 @@ export default function Profile() {
   const onSave = async (e: FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement)
-    const newUser = change(user, {
+    const newUser = userModel(user, {
       name: String(formData.get('name')),
       avatar: String(formData.get('avatar'))
     })

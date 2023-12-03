@@ -1,15 +1,14 @@
-import {User} from "./User";
+import {userModel, UserModel} from "./UserModel";
 import {firebaseService} from "../firebase/firebaseService";
-import {create} from "../base/I";
-import {Firebase} from "../firebase/Firebase";
-import {Message} from "../message/Message";
-import {StoreCommit} from "../store/StoreCommit";
+import {firebaseModel} from "../firebase/FirebaseModel";
+import {MessageModel} from "../message/MessageModel";
+import {storeCommitModel} from "../store/StoreCommitModel";
 import {profileService} from "../profile/profileService";
-import {firebaseEffect} from "../firebase/firebaseEffect";
-import {storeCommitEffect} from "../store/storeCommitEffect";
+import {firebase} from "../firebase/firebase";
+import {storeCommit} from "../store/storeCommit";
 
 export namespace userService {
-  export const crud = firebaseService.buildCrud(User.collectionName)
+  export const crud = firebaseService.buildCrud(UserModel.collectionName)
 
   export async function currentUser() {
     const userIdCookie = await profileService.userId()
@@ -17,33 +16,34 @@ export namespace userService {
     const existedUser = await crud.getById(userId)
 
     if (existedUser) {
-      return create(
-        User,
-        existedUser.id,
-        existedUser.id,
-        existedUser.name,
-        existedUser.avatar,
-      )
+      return userModel({
+        _id: existedUser.id,
+        id: existedUser.id,
+        name: existedUser.name,
+        avatar: existedUser.avatar,
+      })
     }
 
-    return create(
-      User,
-      userId,
-      userId,
-      User.defaultName,
-      User.defaultAvatar
-    )
+    return userModel({
+      _id: userId,
+      id: userId,
+      name: UserModel.defaultName,
+      avatar: UserModel.defaultAvatar
+    })
   }
 
   export async function watchUsers() {
-    await firebaseEffect(create(Firebase, 'onCollection', User.collectionName, {
-      async onData(data: Message[]) {
-        await storeCommitEffect(create(
-          StoreCommit,
-          'setUsers',
-          data
-        ))
-      },
+    await firebase(firebaseModel({
+      action: 'onCollection',
+      collection: UserModel.collectionName,
+      data: {
+        async onData(data: MessageModel[]) {
+          await storeCommit(storeCommitModel({
+            action: 'setUsers',
+            payload: data
+          }))
+        },
+      }
     }))
   }
 }

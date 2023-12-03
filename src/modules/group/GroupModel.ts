@@ -1,4 +1,4 @@
-export class Group {
+export class GroupModel {
   static collectionName = 'groups'
 
   constructor(

@@ -1,11 +1,10 @@
-import {Cookies} from "./Cookies";
+import {cookiesModel, CookiesModel} from "./CookiesModel";
 import SystemCookies from "js-cookie";
-import {change} from "../base/I";
 
-export async function cookiesEffect(model: Cookies) {
+export async function cookies(model: CookiesModel) {
   if (model.operation === 'r') {
     const cookie = SystemCookies.get(model.key)
-    return change(model, {
+    return cookiesModel(model, {
       value: cookie
     })
   }

@@ -1,46 +1,71 @@
-import {create} from "../base/I";
-import {Firebase} from "./Firebase";
-import {firebaseEffect} from "./firebaseEffect";
+import {firebaseModel} from "./FirebaseModel";
+import {firebase} from "./firebase";
 
 export namespace firebaseService {
   export function buildCrud(collectionName: string) {
+    const baseModel = firebaseModel({
+      collection: collectionName
+    })
+
     return {
       async getById(id: string) {
-        const result = await firebaseEffect(create(Firebase, 'get', collectionName, {
-          id
+        const result = await firebase(firebaseModel(baseModel, {
+          action: 'get',
+          data: {
+            id
+          }
         }));
 
         return result.result;
       },
+
       async getAll() {
-        const result = await firebaseEffect(create(Firebase, 'list', collectionName, {}));
+        const result = await firebase(firebaseModel(baseModel, {
+          action: 'list'
+        }));
 
         return result.result;
       },
+
       async findById(id: string) {
-        const result = await firebaseEffect(create(Firebase, 'list', collectionName, {
-          where: [
-            ['id', '==', id]
-          ]
+        const result = await firebase(firebaseModel(baseModel, {
+          action: 'list',
+          data: {
+            where: [
+              ['id', '==', id]
+            ]
+          }
         }));
 
         return result.result;
       },
+
       async deleteById(id: string, onDelete?: Function) {
-        const result = await firebaseEffect(create(Firebase, 'remove', collectionName, {
-          id,
-          onDelete
+        const result = await firebase(firebaseModel(baseModel, {
+          action: 'remove',
+          data: {
+            id,
+            onDelete
+          }
         }));
 
         return result.result;
       },
+
       async update(data: any) {
-        const result = await firebaseEffect(create(Firebase, 'update', collectionName, data));
+        const result = await firebase(firebaseModel(baseModel, {
+          action: 'update',
+          data
+        }));
 
         return result.result;
       },
+
       async create(data: any) {
-        const result = await firebaseEffect(create(Firebase, 'add', collectionName, data));
+        const result = await firebase(firebaseModel(baseModel, {
+          action: 'add',
+          data
+        }));
 
         return result.isDone
       }

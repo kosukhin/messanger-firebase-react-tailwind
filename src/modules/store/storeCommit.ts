@@ -1,4 +1,4 @@
-import {StoreCommit} from "./StoreCommit";
+import {StoreCommitModel} from "./StoreCommitModel";
 import {store} from "../../store/store";
 import {counterSlice} from "../../store/counterSlice";
 import {groupSlice} from "../../store/groupSlice";
@@ -18,7 +18,7 @@ const actions: any = {
   setUsers
 }
 
-export async function storeCommitEffect(model: StoreCommit) {
+export async function storeCommit(model: StoreCommitModel) {
   if (actions[model.action]) {
     store.dispatch(actions[model.action](model.payload))
   }

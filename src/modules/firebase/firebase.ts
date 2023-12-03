@@ -1,4 +1,4 @@
-import {Firebase} from "./Firebase";
+import {firebaseModel, FirebaseModel} from "./FirebaseModel";
 import {
   addDoc,
   collection,
@@ -13,7 +13,6 @@ import {
   where
 } from "firebase/firestore";
 import {initializeApp} from "firebase/app";
-import {change} from "../base/I";
 
 initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -22,7 +21,7 @@ initializeApp({
 });
 const db = getFirestore();
 
-export async function firebaseEffect(model: Firebase) {
+export async function firebase(model: FirebaseModel) {
   if (model.action === 'add') {
     const addResult = await addDoc(
       collection(
@@ -31,7 +30,7 @@ export async function firebaseEffect(model: Firebase) {
       ),
       model.data
     );
-    model = change(model, {
+    model = firebaseModel(model, {
       isDone: true,
       result: addResult
     })
@@ -41,7 +40,7 @@ export async function firebaseEffect(model: Firebase) {
     const {_id, ...data} = model.data
     const result = doc(db, model.collection, _id);
     const updateResult = await setDoc(result, data);
-    return change(model, {
+    return firebaseModel(model, {
       isDone: true,
       result: updateResult
     })
@@ -53,7 +52,7 @@ export async function firebaseEffect(model: Firebase) {
     if (model.data.onDelete) {
       model.data.onDelete();
     }
-    return change(model, {
+    return firebaseModel(model, {
       result: deletionResult
     })
   }
@@ -61,7 +60,7 @@ export async function firebaseEffect(model: Firebase) {
   if (model.action === 'get') {
     const result = doc(db, model.collection, model.data.id);
     const docSnap = await getDoc(result);
-    return change(model, {
+    return firebaseModel(model, {
       result: docSnap.data()
     })
   }
@@ -78,7 +77,7 @@ export async function firebaseEffect(model: Firebase) {
     const querySnapshot = await getDocs(q);
     const result = await getShapshotResults(querySnapshot as any)
 
-    return change(model, {
+    return firebaseModel(model, {
       result
     })
   }
