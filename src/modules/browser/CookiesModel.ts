@@ -1,16 +1,13 @@
 import {defineModelFactory} from "../base/I";
 
-export class CookiesModel {
-  constructor(
-    readonly key: string,
-    readonly operation: 'r' | 'w' | 'd',
-    readonly timeout: number,
-    readonly value?: string,
-  ) {
-  }
-}
+export type CookiesModel = Readonly<{
+  key: string,
+  operation: 'r' | 'w' | 'd',
+  timeout: number,
+  value?: string,
+}>
 
-export const cookiesModel = defineModelFactory<CookiesModel>({
-  operation: 'r',
+export const cookiesModel = defineModelFactory<CookiesModel>()({
+  operation: 'r' as CookiesModel['operation'],
   timeout: 7
 })

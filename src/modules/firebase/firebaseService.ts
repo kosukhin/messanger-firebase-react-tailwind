@@ -4,6 +4,7 @@ import {firebase} from "./firebase";
 export namespace firebaseService {
   export function buildCrud(collectionName: string) {
     const baseModel = firebaseModel({
+      action: 'get',
       collection: collectionName
     })
 

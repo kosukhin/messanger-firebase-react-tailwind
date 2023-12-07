@@ -1,17 +1,14 @@
 import {defineModelFactory} from "../base/I";
 
-export class UserModel {
-  static collectionName = 'users';
-  static defaultName = 'Аноним';
-  static defaultAvatar = 'https://i.pravatar.cc/300';
+export const USERS_COLLECTION = 'users';
+export const DEFAULT_NAME = 'Аноним';
+export const DEFAULT_AVATAR = 'https://i.pravatar.cc/300';
 
-  constructor(
-    readonly _id: string,
-    readonly id: string,
-    readonly name: string,
-    readonly avatar: string
-  ) {
-  }
-}
+export type UserModel = Readonly<{
+  _id: string,
+  id: string,
+  name: string,
+  avatar: string
+}>
 
-export const userModel = defineModelFactory<UserModel>()
+export const userModel = defineModelFactory<UserModel>()()

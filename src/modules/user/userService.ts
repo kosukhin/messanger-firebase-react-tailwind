@@ -1,14 +1,14 @@
-import {userModel, UserModel} from "./UserModel";
-import {firebaseService} from "../firebase/firebaseService";
-import {firebaseModel} from "../firebase/FirebaseModel";
-import {MessageModel} from "../message/MessageModel";
-import {storeCommitModel} from "../store/StoreCommitModel";
-import {profileService} from "../profile/profileService";
-import {firebase} from "../firebase/firebase";
-import {storeCommit} from "../store/storeCommit";
+import { firebase } from "../firebase/firebase";
+import { firebaseModel } from "../firebase/FirebaseModel";
+import { firebaseService } from "../firebase/firebaseService";
+import { MessageModel } from "../message/MessageModel";
+import { profileService } from "../profile/profileService";
+import { storeCommit } from "../store/storeCommit";
+import { storeCommitModel } from "../store/StoreCommitModel";
+import { DEFAULT_AVATAR, DEFAULT_NAME, userModel, USERS_COLLECTION } from "./UserModel";
 
 export namespace userService {
-  export const crud = firebaseService.buildCrud(UserModel.collectionName)
+  export const crud = firebaseService.buildCrud(USERS_COLLECTION)
 
   export async function currentUser() {
     const userIdCookie = await profileService.userId()
@@ -27,15 +27,15 @@ export namespace userService {
     return userModel({
       _id: userId,
       id: userId,
-      name: UserModel.defaultName,
-      avatar: UserModel.defaultAvatar
+      name: DEFAULT_NAME,
+      avatar: DEFAULT_AVATAR
     })
   }
 
   export async function watchUsers() {
     await firebase(firebaseModel({
       action: 'onCollection',
-      collection: UserModel.collectionName,
+      collection: USERS_COLLECTION,
       data: {
         async onData(data: MessageModel[]) {
           await storeCommit(storeCommitModel({

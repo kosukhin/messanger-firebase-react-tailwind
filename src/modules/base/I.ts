@@ -1,8 +1,8 @@
-// TODO тут нужно придумать правильную типизацию для required
-export function defineModelFactory<T>(defaults: Partial<T> = {}) {
+
+export const defineModelFactory = <T,>() => <D extends Partial<T>>(defaults?: D) => {
   return (
-    required: Partial<T> = {},
-    changed: Partial<T> = {}
+    required: Omit<T, keyof D> & Partial<D>,
+    changed?: Partial<T>
   ): T => {
     return {
       ...defaults,

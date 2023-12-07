@@ -1,11 +1,10 @@
 import {defineModelFactory} from "../base/I";
 
-export class StoreCommitModel {
-  constructor(readonly action: string, readonly payload?: any) {
-  }
-}
+export type StoreCommitModel = Readonly<{
+  action: string,
+  payload?: any
+}>
 
-
-export const storeCommitModel = defineModelFactory<StoreCommitModel>({
-  payload: null
+export const storeCommitModel = defineModelFactory<StoreCommitModel>()({
+  payload: null as any
 })

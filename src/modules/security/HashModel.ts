@@ -1,16 +1,13 @@
 import {defineModelFactory} from "../base/I";
 
-export class HashModel {
-  static hashUuid = 'uuid';
+export const HASH_UUID = 'uuid';
 
-  constructor(
-    readonly type: string = HashModel.hashUuid,
-    readonly value: string = ''
-  ) {
-  }
-}
+export type HashModel = Readonly<{
+  type: string,
+  value: string
+}>
 
-export const hashModel = defineModelFactory<HashModel>({
+export const hashModel = defineModelFactory<HashModel>()({
   value: '',
-  type: HashModel.hashUuid
+  type: HASH_UUID
 })
