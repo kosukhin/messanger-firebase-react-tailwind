@@ -12,7 +12,7 @@ export type FirebaseModel = Readonly<{
 }>
 
 export const firebaseModel = defineModelFactory<FirebaseModel>()({
-  isDone: false,
+  isDone: false as boolean,
   result: null,
   data: {}
 })
