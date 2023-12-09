@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react';
-import './assets/index.css'
-import Header from "./components/layout/Header";
+import { useEffect } from 'react';
+import './assets/index.css';
 import Body from "./components/layout/Body";
 import Footer from "./components/layout/Footer";
-import {groupService} from "./modules/group/groupService";
-import {messageService} from "./modules/message/messageService";
-import {profileService} from "./modules/profile/profileService";
-import {userService} from "./modules/user/userService";
+import Header from "./components/layout/Header";
+import { groupService } from "./modules/group/groupService";
+import { messageService } from "./modules/message/messageService";
+import { profileService } from "./modules/profile/profileService";
+import { userService } from "./modules/user/userService";
 
 function App() {
   useEffect(() => {
