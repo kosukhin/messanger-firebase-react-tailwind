@@ -1,4 +1,4 @@
-import {firebaseModel, FirebaseModel} from "./FirebaseModel";
+import { initializeApp } from "firebase/app";
 import {
   addDoc,
   collection,
@@ -12,7 +12,7 @@ import {
   setDoc,
   where
 } from "firebase/firestore";
-import {initializeApp} from "firebase/app";
+import { firebaseModel } from "./FirebaseModel";
 
 initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -21,7 +21,9 @@ initializeApp({
 });
 const db = getFirestore();
 
-export async function firebase(model: FirebaseModel) {
+export async function firebase(...args: Parameters<typeof firebaseModel>) {
+  let model = firebaseModel(...args)
+
   if (model.action === 'add') {
     const addResult = await addDoc(
       collection(

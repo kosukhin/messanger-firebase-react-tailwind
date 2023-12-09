@@ -36,10 +36,10 @@ export default function AppMessage(props: any) {
         return;
       }
 
-      await storeCommit(storeCommitModel({
+      await storeCommit({
         action: 'setMessages',
         payload: []
-      }))
+      })
     })
   }
 

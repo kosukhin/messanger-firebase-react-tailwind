@@ -1,26 +1,23 @@
-import {cookiesModel} from "../browser/CookiesModel";
-import {Profile} from "./Profile";
-import {hashModel} from "../security/HashModel";
-import {firebaseModel} from "../firebase/FirebaseModel";
-import {cookies} from "../browser/cookies";
-import {firebase} from "../firebase/firebase";
-import {hash} from "../security/hash";
+import { cookies } from "../browser/cookies";
+import { firebase } from "../firebase/firebase";
+import { hash } from "../security/hash";
+import { Profile } from "./Profile";
 
 export namespace profileService {
   export function userId() {
-    return cookies(cookiesModel({key: Profile.cookieIdKey}))
+    return cookies({key: Profile.cookieIdKey})
   }
 
   export async function initProfile() {
     const cookieUid = await userId();
 
     if (!cookieUid.value) {
-      const uid = await hash(hashModel())
-      await cookies(cookiesModel(cookieUid, {
+      const uid = await hash()
+      await cookies(cookieUid, {
         value: uid.value,
         operation: 'w',
         timeout: Profile.cookieLifeTime
-      }))
+      })
     }
   }
 
@@ -29,7 +26,7 @@ export namespace profileService {
     groupId: string
   ) {
     const fromId = await userId()
-    const result = await firebase(firebaseModel({
+    const result = await firebase({
       action: 'add',
       collection: 'messages',
       data: {
@@ -38,7 +35,7 @@ export namespace profileService {
         text,
         time: (new Date()).getTime()
       }
-    }));
+    });
 
     return result.isDone
   }

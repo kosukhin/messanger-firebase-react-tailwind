@@ -1,10 +1,8 @@
 import { firebase } from "../firebase/firebase";
-import { firebaseModel } from "../firebase/FirebaseModel";
 import { firebaseService } from "../firebase/firebaseService";
 import { MessageModel } from "../message/MessageModel";
 import { profileService } from "../profile/profileService";
 import { storeCommit } from "../store/storeCommit";
-import { storeCommitModel } from "../store/StoreCommitModel";
 import { DEFAULT_AVATAR, DEFAULT_NAME, userModel, USERS_COLLECTION } from "./UserModel";
 
 export namespace userService {
@@ -33,17 +31,17 @@ export namespace userService {
   }
 
   export async function watchUsers() {
-    await firebase(firebaseModel({
+    await firebase({
       action: 'onCollection',
       collection: USERS_COLLECTION,
       data: {
         async onData(data: MessageModel[]) {
-          await storeCommit(storeCommitModel({
+          await storeCommit({
             action: 'setUsers',
             payload: data
-          }))
+          })
         },
       }
-    }))
+    })
   }
 }

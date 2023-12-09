@@ -47,10 +47,10 @@ export default function GroupMessages() {
         return;
       }
 
-      await storeCommit(storeCommitModel({
+      await storeCommit({
         action: 'setGroups',
         payload: []
-      }))
+      })
     })
   }
 

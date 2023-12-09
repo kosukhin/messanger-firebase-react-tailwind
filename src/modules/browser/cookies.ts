@@ -1,7 +1,9 @@
-import {cookiesModel, CookiesModel} from "./CookiesModel";
 import SystemCookies from "js-cookie";
+import { cookiesModel } from "./CookiesModel";
 
-export async function cookies(model: CookiesModel) {
+export async function cookies(...args: Parameters<typeof cookiesModel>) {
+  const model = cookiesModel(...args);
+
   if (model.operation === 'r') {
     const cookie = SystemCookies.get(model.key)
     return cookiesModel(model, {
