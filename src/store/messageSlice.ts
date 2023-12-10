@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {MessageModel} from "../modules/message/MessageModel";
+import {MessageModel} from "../modules/message/messageModel";
 
 export const messageSlice = createSlice({
   name: 'messages',

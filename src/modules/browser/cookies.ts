@@ -1,9 +1,8 @@
 import SystemCookies from "js-cookie";
-import { cookiesModel } from "./CookiesModel";
+import { CookiesModel, cookiesModel } from "./cookiesModel";
+import { defineModelEffect } from "../base/I";
 
-export async function cookies(...args: Parameters<typeof cookiesModel>) {
-  const model = cookiesModel(...args);
-
+export const cookies = defineModelEffect<typeof cookiesModel, CookiesModel>(cookiesModel, async (model) => {
   if (model.operation === 'r') {
     const cookie = SystemCookies.get(model.key)
     return cookiesModel(model, {
@@ -22,4 +21,4 @@ export async function cookies(...args: Parameters<typeof cookiesModel>) {
   }
 
   return model;
-}
+})

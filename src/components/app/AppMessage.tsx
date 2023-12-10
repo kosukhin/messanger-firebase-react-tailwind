@@ -1,12 +1,11 @@
+import { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { MessageModel } from "../../modules/message/messageModel";
+import { messageService } from "../../modules/message/messageService";
+import { storeCommit } from "../../modules/store/storeCommit";
+import { userModel, UserModel } from "../../modules/user/userModel";
+import { userService } from "../../modules/user/userService";
 import BaseButton from "../ui/BaseButton";
-import {MessageModel} from "../../modules/message/MessageModel";
-import {userModel, UserModel} from "../../modules/user/UserModel";
-import {useSelector} from "react-redux";
-import {useEffect, useMemo, useState} from "react";
-import {storeCommitModel} from "../../modules/store/StoreCommitModel";
-import {messageService} from "../../modules/message/messageService";
-import {userService} from "../../modules/user/userService";
-import {storeCommit} from "../../modules/store/storeCommit";
 
 export default function AppMessage(props: any) {
   const users: UserModel[] = useSelector((state: any) => {

@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {GroupModel} from "../modules/group/GroupModel";
+import {GroupModel} from "../modules/group/groupModel";
 
 export const groupSlice = createSlice({
   name: 'groups',

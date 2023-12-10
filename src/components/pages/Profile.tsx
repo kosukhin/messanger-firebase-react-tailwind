@@ -1,7 +1,7 @@
 import BaseButton from "../ui/BaseButton";
 import {FormEvent, useEffect, useState} from "react";
 import {userService} from "../../modules/user/userService";
-import {userModel} from "../../modules/user/UserModel";
+import {userModel} from "../../modules/user/userModel";
 
 export default function Profile() {
   const [user, setUser] = useState(userModel({

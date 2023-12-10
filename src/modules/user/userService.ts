@@ -1,9 +1,9 @@
 import { firebase } from "../firebase/firebase";
 import { firebaseService } from "../firebase/firebaseService";
-import { MessageModel } from "../message/MessageModel";
+import { MessageModel } from "../message/messageModel";
 import { profileService } from "../profile/profileService";
 import { storeCommit } from "../store/storeCommit";
-import { DEFAULT_AVATAR, DEFAULT_NAME, userModel, USERS_COLLECTION } from "./UserModel";
+import { DEFAULT_AVATAR, DEFAULT_NAME, userModel, USERS_COLLECTION } from "./userModel";
 
 export namespace userService {
   export const crud = firebaseService.buildCrud(USERS_COLLECTION)

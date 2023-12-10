@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {userModel} from "../../modules/user/UserModel";
+import {userModel} from "../../modules/user/userModel";
 import {userService} from "../../modules/user/userService";
 
 function Header() {

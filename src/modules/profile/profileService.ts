@@ -1,11 +1,11 @@
 import { cookies } from "../browser/cookies";
 import { firebase } from "../firebase/firebase";
 import { hash } from "../security/hash";
-import { Profile } from "./Profile";
+import { PROFILE_COOKIE_ID_KEY, PROFILE_COOKIE_LIFE_TIME } from "./profileModel";
 
 export namespace profileService {
   export function userId() {
-    return cookies({key: Profile.cookieIdKey})
+    return cookies({key: PROFILE_COOKIE_ID_KEY})
   }
 
   export async function initProfile() {
@@ -16,7 +16,7 @@ export namespace profileService {
       await cookies(cookieUid, {
         value: uid.value,
         operation: 'w',
-        timeout: Profile.cookieLifeTime
+        timeout: PROFILE_COOKIE_LIFE_TIME
       })
     }
   }

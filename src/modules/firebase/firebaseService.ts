@@ -1,4 +1,4 @@
-import {firebaseModel} from "./FirebaseModel";
+import {firebaseModel} from "./firebaseModel";
 import {firebase} from "./firebase";
 
 export namespace firebaseService {

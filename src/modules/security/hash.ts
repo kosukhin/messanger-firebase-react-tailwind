@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
-import { hashModel } from "./HashModel";
+import { HashModel, hashModel } from "./hashModel";
+import { defineModelEffect } from "../base/I";
 
-export async function hash(...args: Parameters<typeof hashModel>) {
-  const model = hashModel(...args)
+export const hash = defineModelEffect<typeof hashModel, HashModel>(hashModel, async (model) => {
   if (model.type === 'uuid') {
     return hashModel(model, {
       value: uuidv4()
@@ -10,4 +10,4 @@ export async function hash(...args: Parameters<typeof hashModel>) {
   }
 
   return model
-}
+})

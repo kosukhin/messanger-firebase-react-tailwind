@@ -1,8 +1,8 @@
 import { FormEvent } from "react";
 import { useSelector } from "react-redux";
-import { GroupModel } from "../modules/group/GroupModel";
+import { GroupModel } from "../modules/group/groupModel";
 import { groupService } from "../modules/group/groupService";
-import { hashModel } from "../modules/security/HashModel";
+import { hashModel } from "../modules/security/hashModel";
 import { hash } from "../modules/security/hash";
 import BaseButton from "./ui/BaseButton";
 

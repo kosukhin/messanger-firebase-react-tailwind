@@ -3,7 +3,8 @@ import { groupSlice } from "../../store/groupSlice";
 import { messageSlice } from "../../store/messageSlice";
 import { store } from "../../store/store";
 import { userSlice } from "../../store/userSlice";
-import { storeCommitModel } from "./StoreCommitModel";
+import { defineModelEffect } from "../base/I";
+import { storeCommitModel } from "./storeCommitModel";
 
 const {incremented, decremented} = counterSlice.actions
 const {setGroups} = groupSlice.actions
@@ -18,9 +19,8 @@ const actions: any = {
   setUsers
 }
 
-export async function storeCommit(...args: Parameters<typeof storeCommitModel>) {
-  const model = storeCommitModel(...args)
+export const storeCommit = defineModelEffect<typeof storeCommitModel, void>(storeCommitModel, async (model) => {
   if (actions[model.action]) {
     store.dispatch(actions[model.action](model.payload))
   }
-}
+})

@@ -12,7 +12,8 @@ import {
   setDoc,
   where
 } from "firebase/firestore";
-import { firebaseModel } from "./FirebaseModel";
+import { FirebaseModel, firebaseModel } from "./firebaseModel";
+import { defineModelEffect } from "../base/I";
 
 initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -21,9 +22,7 @@ initializeApp({
 });
 const db = getFirestore();
 
-export async function firebase(...args: Parameters<typeof firebaseModel>) {
-  let model = firebaseModel(...args)
-
+export const firebase = defineModelEffect<typeof firebaseModel, FirebaseModel>(firebaseModel, async (model) => {
   if (model.action === 'add') {
     const addResult = await addDoc(
       collection(
@@ -108,7 +107,7 @@ export async function firebase(...args: Parameters<typeof firebaseModel>) {
   }
 
   return model;
-}
+})
 
 async function getShapshotResults(shapshot: any) {
   return await (new Promise((resolve, reject) => {

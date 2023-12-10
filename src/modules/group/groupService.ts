@@ -1,15 +1,15 @@
 import { firebase } from "../firebase/firebase";
 import { firebaseService } from "../firebase/firebaseService";
 import { storeCommit } from "../store/storeCommit";
-import { GroupModel } from "./GroupModel";
+import { GROUP_COLLECTION, GroupModel } from "./groupModel";
 
 export namespace groupService {
-  export const crud = firebaseService.buildCrud(GroupModel.collectionName)
+  export const crud = firebaseService.buildCrud(GROUP_COLLECTION)
 
   export async function watchGroups() {
     await firebase({
       action: 'onCollection',
-      collection: GroupModel.collectionName,
+      collection: GROUP_COLLECTION,
       data: {
         async onData(data: GroupModel[]) {
           await storeCommit({

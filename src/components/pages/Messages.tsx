@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {MessageModel} from "../../modules/message/MessageModel";
+import {MessageModel} from "../../modules/message/messageModel";
 import AppMessage from "../app/AppMessage";
 
 export default function Messages() {
