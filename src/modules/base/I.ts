@@ -12,8 +12,8 @@ export const defineModelFactory = <T,>() => <D extends Partial<T>>(defaults?: D)
 }
 
 export const defineModelEffect = <T extends (...args: any[]) => any, R extends any>(modelFactory: T, fn: (model: ReturnType<T>) => Promise<R>) => {
-  return async (...args: Parameters<T>): Promise<R> => {
+  return async <CR = void>(...args: Parameters<T>): Promise<CR extends void ? R : CR> => {
     const model = modelFactory(...args);
-    return fn(model)
+    return fn(model) as CR extends void ? R : CR
   }
 }
