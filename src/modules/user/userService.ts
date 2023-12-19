@@ -36,7 +36,7 @@ export namespace userService {
       collection: USERS_COLLECTION,
       data: {
         async onData(data: MessageModel[]) {
-          await storeCommit({
+          storeCommit({
             action: 'setUsers',
             payload: data
           })

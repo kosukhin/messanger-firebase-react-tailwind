@@ -62,7 +62,7 @@ export default function GroupMessages() {
       <div key={message._id} className={'mb-2'}>
         <AppMessage message={message}/>
       </div>
-    )) : 'Нет сооб'}
+    )) : 'Нет сообщений'}
     <div className={'mt-auto'}>
       <form onSubmit={onNewMessage}>
         <div className={'mb-2'}>

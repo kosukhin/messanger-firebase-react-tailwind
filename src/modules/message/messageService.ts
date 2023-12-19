@@ -12,7 +12,7 @@ export namespace messageService {
       collection: MESSAGE_COLLECTION,
       data: {
         async onData(data: MessageModel[]) {
-          await storeCommit({
+          storeCommit({
             action: 'setMessages',
             payload: data
           })

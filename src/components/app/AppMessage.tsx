@@ -35,7 +35,7 @@ export default function AppMessage(props: any) {
         return;
       }
 
-      await storeCommit({
+      storeCommit({
         action: 'setMessages',
         payload: []
       })

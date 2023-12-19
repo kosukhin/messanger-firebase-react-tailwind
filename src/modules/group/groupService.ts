@@ -12,7 +12,7 @@ export namespace groupService {
       collection: GROUP_COLLECTION,
       data: {
         async onData(data: GroupModel[]) {
-          await storeCommit({
+          storeCommit({
             action: 'setGroups',
             payload: data
           })

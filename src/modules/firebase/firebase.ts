@@ -22,7 +22,7 @@ initializeApp({
 });
 const db = getFirestore();
 
-export const firebase = defineModelEffect<typeof firebaseModel, FirebaseModel>(firebaseModel, async (model) => {
+export const firebase = defineModelEffect<Promise<FirebaseModel>>()(firebaseModel, async (model) => {
   if (model.action === 'add') {
     const addResult = await addDoc(
       collection(

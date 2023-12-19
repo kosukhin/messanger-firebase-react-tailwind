@@ -9,11 +9,11 @@ export namespace profileService {
   }
 
   export async function initProfile() {
-    const cookieUid = await userId();
+    const cookieUid = userId();
 
     if (!cookieUid.value) {
-      const uid = await hash()
-      await cookies(cookieUid, {
+      const uid = hash()
+      cookies(cookieUid, {
         value: uid.value,
         operation: 'w',
         timeout: PROFILE_COOKIE_LIFE_TIME
@@ -25,7 +25,7 @@ export namespace profileService {
     text: string,
     groupId: string
   ) {
-    const fromId = await userId()
+    const fromId = userId()
     const result = await firebase({
       action: 'add',
       collection: 'messages',

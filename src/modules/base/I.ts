@@ -11,9 +11,9 @@ export const defineModelFactory = <T,>() => <D extends Partial<T>>(defaults?: D)
   }
 }
 
-export const defineModelEffect = <T extends (...args: any[]) => any, R extends any>(modelFactory: T, fn: (model: ReturnType<T>) => Promise<R>) => {
-  return async <CR = void>(...args: Parameters<T>): Promise<Readonly<CR extends void ? R : CR>> => {
+export const defineModelEffect = <R extends any = '__R__',>() => <T extends (...args: any[]) => any>(modelFactory: T, fn: (model: ReturnType<T>) => R extends '__R__' ? ReturnType<T> : R) => {
+  return <CR = '__CR__'>(...args: Parameters<T>) => {
     const model = modelFactory(...args);
-    return fn(model) as CR extends void ? R : CR
+    return fn(model) as CR extends '__CR__' ? (R extends '__R__' ? ReturnType<T> : R) : CR
   }
 }

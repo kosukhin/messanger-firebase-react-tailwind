@@ -19,7 +19,7 @@ const actions: any = {
   setUsers
 }
 
-export const storeCommit = defineModelEffect<typeof storeCommitModel, void>(storeCommitModel, async (model) => {
+export const storeCommit = defineModelEffect<void>()(storeCommitModel, (model) => {
   if (actions[model.action]) {
     store.dispatch(actions[model.action](model.payload))
   }
