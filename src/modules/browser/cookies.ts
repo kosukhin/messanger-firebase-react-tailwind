@@ -1,26 +1,31 @@
 import SystemCookies from "js-cookie";
-import { cookiesModel } from "./cookiesModel";
-import { defineModelEffect } from "../base/I";
 
-export const cookies = defineModelEffect()(cookiesModel, (model) => {
-  if (model.operation === "r") {
-    const cookie = SystemCookies.get(model.key);
-    return cookiesModel(model, {
-      value: cookie,
-    });
+
+export class Cookies {
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+  constructor(
+    public key: string,
+    public operation: 'r' | 'w' | 'd' = 'r',
+    public timeout: number = 7,
+    public value?: string,
+  ) {}
+
+  doIO(this: Cookies) {
+    if (this.operation === "r") {
+      const cookie = SystemCookies.get(this.key);
+      this.value = cookie
+    }
+
+    if (this.operation === "w") {
+      SystemCookies.set(this.key, String(this.value), {
+        expires: this.timeout,
+      });
+    }
+
+    if (this.operation === "d") {
+      SystemCookies.remove(this.key);
+    }
+
+    return this;
   }
-
-  if (model.operation === "w") {
-    SystemCookies.set(model.key, String(model.value), {
-      expires: model.timeout,
-    });
-    return model;
-  }
-
-  if (model.operation === "d") {
-    SystemCookies.remove(model.key);
-    return model;
-  }
-
-  return model;
-});
+}
