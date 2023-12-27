@@ -1,26 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { MessageModel } from "../../modules/message/messageModel";
+import { Message } from "../../modules/message/message";
 import { messageService } from "../../modules/message/messageService";
 import { storeCommit } from "../../modules/store/storeCommit";
-import { userModel, UserModel } from "../../modules/user/userModel";
+import { User } from "../../modules/user/user";
 import { userService } from "../../modules/user/userService";
 import BaseButton from "../ui/BaseButton";
 
 export default function AppMessage(props: any) {
-  const users: UserModel[] = useSelector((state: any) => {
+  const users: User[] = useSelector((state: any) => {
     return state.users.users
   })
   const usersMap = useMemo(() => {
-    return users.reduce((acc: any, item: UserModel) => {
+    return users.reduce((acc: any, item: User) => {
       acc[item.id] = item
       return acc;
     }, {})
   }, [users])
-  const message: MessageModel = props.message
-  const [user, setUser] = useState(userModel({
+  const message: Message = props.message
+  const [user, setUser] = useState({
     _id: '', id: '', name: '', avatar: ''
-  }))
+  })
 
   useEffect(() => {
     userService.currentUser().then(user => {
@@ -28,7 +28,7 @@ export default function AppMessage(props: any) {
     })
   }, [])
 
-  const messagesAll: MessageModel[] = useSelector((state: any) => state.messages.messages)
+  const messagesAll: Message[] = useSelector((state: any) => state.messages.messages)
   const onDelete = (id: string) => async () => {
     await messageService.crud.deleteById(id, async () => {
       if (messagesAll.length !== 1) {

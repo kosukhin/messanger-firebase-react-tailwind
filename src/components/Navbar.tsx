@@ -1,17 +1,16 @@
 import { FormEvent } from "react";
 import { useSelector } from "react-redux";
-import { GroupModel } from "../modules/group/groupModel";
+import { Group } from "../modules/group/group";
 import { groupService } from "../modules/group/groupService";
-import { hashModel } from "../modules/security/hashModel";
 import { hash } from "../modules/security/hash";
 import BaseButton from "./ui/BaseButton";
 
 function Navbar() {
-  const groups: GroupModel[] = useSelector((state: any) => state.groups.groups)
+  const groups: Group[] = useSelector((state: any) => state.groups.groups)
 
   const onSave = async (e: FormEvent) => {
     e.preventDefault();
-    const id = await hash(hashModel());
+    const id = hash();
     const formData = new FormData(e.target as HTMLFormElement)
     await groupService.crud.create({
       id: id.value,

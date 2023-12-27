@@ -1,6 +1,6 @@
 export const MESSAGE_COLLECTION = 'messages'
 
-export type MessageModel = {
+export type Message = {
   _id: string,
   groupId: string,
   text: string,

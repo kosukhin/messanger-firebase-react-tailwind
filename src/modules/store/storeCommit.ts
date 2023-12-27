@@ -3,8 +3,6 @@ import { groupSlice } from "../../store/groupSlice";
 import { messageSlice } from "../../store/messageSlice";
 import { store } from "../../store/store";
 import { userSlice } from "../../store/userSlice";
-import { defineModelEffect } from "../base/I";
-import { storeCommitModel } from "./storeCommitModel";
 
 const {incremented, decremented} = counterSlice.actions
 const {setGroups} = groupSlice.actions
@@ -19,8 +17,13 @@ const actions: any = {
   setUsers
 }
 
-export const storeCommit = defineModelEffect<void>()(storeCommitModel, (model) => {
+export type StoreCommit = {
+  action: string,
+  payload?: any
+}
+
+export function storeCommit(model: StoreCommit) {
   if (actions[model.action]) {
     store.dispatch(actions[model.action](model.payload))
   }
-})
+}

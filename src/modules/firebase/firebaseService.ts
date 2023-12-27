@@ -1,16 +1,17 @@
-import {firebaseModel} from "./firebaseModel";
-import {firebase} from "./firebase";
+import { firebase, firebaseDefaults } from "./firebase";
 
 export namespace firebaseService {
   export function buildCrud(collectionName: string) {
-    const baseModel = firebaseModel({
+    const baseModel = {
+      ...firebaseDefaults,
       action: 'get',
       collection: collectionName
-    })
+    }
 
     return {
       async getById(id: string) {
-        const result = await firebase(baseModel, {
+        const result = await firebase({
+          ...baseModel,
           action: 'get',
           data: {
             id
@@ -21,7 +22,8 @@ export namespace firebaseService {
       },
 
       async getAll() {
-        const result = await firebase(baseModel, {
+        const result = await firebase({
+          ...baseModel,
           action: 'list'
         });
 
@@ -29,7 +31,8 @@ export namespace firebaseService {
       },
 
       async findById(id: string) {
-        const result = await firebase(baseModel, {
+        const result = await firebase({
+          ...baseModel,
           action: 'list',
           data: {
             where: [
@@ -42,7 +45,8 @@ export namespace firebaseService {
       },
 
       async deleteById(id: string, onDelete?: Function) {
-        const result = await firebase(baseModel, {
+        const result = await firebase({
+          ...baseModel,
           action: 'remove',
           data: {
             id,
@@ -54,7 +58,8 @@ export namespace firebaseService {
       },
 
       async update(data: any) {
-        const result = await firebase(baseModel, {
+        const result = await firebase({
+          ...baseModel,
           action: 'update',
           data
         });
@@ -63,7 +68,8 @@ export namespace firebaseService {
       },
 
       async create(data: any) {
-        const result = await firebase(baseModel, {
+        const result = await firebase({
+          ...baseModel,
           action: 'add',
           data
         });

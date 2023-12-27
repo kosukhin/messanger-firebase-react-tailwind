@@ -1,10 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {GroupModel} from "../modules/group/groupModel";
+import {Group} from "../modules/group/group";
 
 export const groupSlice = createSlice({
   name: 'groups',
   initialState: {
-    groups: [] as GroupModel[]
+    groups: [] as Group[]
   },
   reducers: {
     setGroups: (state, {payload}) => {

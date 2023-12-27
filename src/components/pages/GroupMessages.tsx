@@ -1,9 +1,9 @@
 import { FormEvent, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router-dom";
-import { GroupModel } from "../../modules/group/groupModel";
+import { Group } from "../../modules/group/group";
 import { groupService } from "../../modules/group/groupService";
-import { MessageModel } from "../../modules/message/messageModel";
+import { Message } from "../../modules/message/message";
 import { profileService } from "../../modules/profile/profileService";
 import { storeCommit } from "../../modules/store/storeCommit";
 import AppMessage from "../app/AppMessage";
@@ -17,10 +17,10 @@ export async function loader({params}: any) {
 
 export default function GroupMessages() {
   const ld = useLoaderData() as any;
-  const messages: MessageModel[] = useSelector((state: any) => state.messages.messages)
-  const groupItems: GroupModel[] = useSelector((state: any) => state.groups.groups)
+  const messages: Message[] = useSelector((state: any) => state.messages.messages)
+  const groupItems: Group[] = useSelector((state: any) => state.groups.groups)
   const groupMessages = useMemo(() => {
-    return messages.filter((message: MessageModel) => {
+    return messages.filter((message: Message) => {
       return message.groupId === ld.id
     }).sort((a, b) => a.time - b.time)
   }, [ld.id, messages])

@@ -1,9 +1,10 @@
 import { firebase } from "../firebase/firebase";
 import { firebaseService } from "../firebase/firebaseService";
-import { MessageModel } from "../message/messageModel";
+import { Message } from "../message/message";
 import { profileService } from "../profile/profileService";
 import { storeCommit } from "../store/storeCommit";
-import { DEFAULT_AVATAR, DEFAULT_NAME, userModel, USERS_COLLECTION } from "./userModel";
+import { firebaseDefaults } from './../firebase/firebase';
+import { DEFAULT_AVATAR, DEFAULT_NAME, USERS_COLLECTION } from "./user";
 
 export namespace userService {
   export const crud = firebaseService.buildCrud(USERS_COLLECTION)
@@ -14,28 +15,29 @@ export namespace userService {
     const existedUser = await crud.getById(userId)
 
     if (existedUser) {
-      return userModel({
+      return {
         _id: existedUser.id,
         id: existedUser.id,
         name: existedUser.name,
         avatar: existedUser.avatar,
-      })
+      }
     }
 
-    return userModel({
+    return {
       _id: userId,
       id: userId,
       name: DEFAULT_NAME,
       avatar: DEFAULT_AVATAR
-    })
+    }
   }
 
   export async function watchUsers() {
     await firebase({
+      ...firebaseDefaults,
       action: 'onCollection',
       collection: USERS_COLLECTION,
       data: {
-        async onData(data: MessageModel[]) {
+        async onData(data: Message[]) {
           storeCommit({
             action: 'setUsers',
             payload: data

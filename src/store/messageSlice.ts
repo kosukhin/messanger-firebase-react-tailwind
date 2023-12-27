@@ -1,10 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {MessageModel} from "../modules/message/messageModel";
+import {Message} from "../modules/message/message";
 
 export const messageSlice = createSlice({
   name: 'messages',
   initialState: {
-    messages: [] as MessageModel[]
+    messages: [] as Message[]
   },
   reducers: {
     setMessages: (state, {payload}) => {

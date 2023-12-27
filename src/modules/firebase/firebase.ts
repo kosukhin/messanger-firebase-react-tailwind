@@ -1,3 +1,4 @@
+import { log } from "console";
 import { initializeApp } from "firebase/app";
 import {
   addDoc,
@@ -12,8 +13,6 @@ import {
   setDoc,
   where
 } from "firebase/firestore";
-import { FirebaseModel, firebaseModel } from "./firebaseModel";
-import { defineModelEffect } from "../base/I";
 
 initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -22,7 +21,31 @@ initializeApp({
 });
 const db = getFirestore();
 
-export const firebase = defineModelEffect<Promise<FirebaseModel>>()(firebaseModel, async (model) => {
+console.log({
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID
+});
+
+
+type FirebaseActions = 'add' | 'update' | 'remove' | 'get' | 'list' | 'onCollection' | 'onDocument'
+
+export type Firebase = {
+  action: FirebaseActions,
+  collection: string,
+  data: any,
+  isDone: boolean,
+  result: any,
+  id?: string
+}
+
+export const firebaseDefaults = {
+  isDone: false as boolean,
+  result: null,
+  data: {} as any
+}
+
+export async function firebase(model: Firebase): Promise<Firebase> {
   if (model.action === 'add') {
     const addResult = await addDoc(
       collection(
@@ -31,20 +54,22 @@ export const firebase = defineModelEffect<Promise<FirebaseModel>>()(firebaseMode
       ),
       model.data
     );
-    model = firebaseModel(model, {
+    model = {
+      ...model,
       isDone: true,
       result: addResult
-    })
+    }
   }
 
   if (model.action === 'update') {
     const {_id, ...data} = model.data
     const result = doc(db, model.collection, _id);
     const updateResult = await setDoc(result, data);
-    return firebaseModel(model, {
+    return {
+      ...model,
       isDone: true,
       result: updateResult
-    })
+    }
   }
 
   if (model.action === 'remove') {
@@ -53,17 +78,19 @@ export const firebase = defineModelEffect<Promise<FirebaseModel>>()(firebaseMode
     if (model.data.onDelete) {
       model.data.onDelete();
     }
-    return firebaseModel(model, {
+    return {
+      ...model,
       result: deletionResult
-    })
+    }
   }
 
   if (model.action === 'get') {
     const result = doc(db, model.collection, model.data.id);
     const docSnap = await getDoc(result);
-    return firebaseModel(model, {
+    return {
+      ...model,
       result: docSnap.data()
-    })
+    }
   }
 
   if (model.action === 'list') {
@@ -78,10 +105,14 @@ export const firebase = defineModelEffect<Promise<FirebaseModel>>()(firebaseMode
     const querySnapshot = await getDocs(q);
     const result = await getShapshotResults(querySnapshot as any)
 
-    return firebaseModel(model, {
+    return {
+      ...model,
       result
-    })
+    }
   }
+
+  console.log(model);
+
 
   if (model.action === 'onCollection') {
     let q: any = collection(db, model.collection);
@@ -90,11 +121,15 @@ export const firebase = defineModelEffect<Promise<FirebaseModel>>()(firebaseMode
       async (snapshot: any) => {           // ...
         const result = await getShapshotResults(snapshot)
 
+        console.log(result);
+
         if (model.data.onData) {
           model.data.onData(result)
         }
       },
       (error) => {
+        console.log(error);
+
         // ...
         if (model.data.onError) {
           model.data.onError(error)
@@ -107,7 +142,7 @@ export const firebase = defineModelEffect<Promise<FirebaseModel>>()(firebaseMode
   }
 
   return model;
-})
+}
 
 async function getShapshotResults(shapshot: any) {
   return await (new Promise((resolve, reject) => {
