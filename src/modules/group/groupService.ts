@@ -14,8 +14,6 @@ export namespace groupService {
       collection: GROUP_COLLECTION,
       data: {
         async onData(data: Group[]) {
-          console.log(data);
-
           storeCommit({
             action: 'setGroups',
             payload: data

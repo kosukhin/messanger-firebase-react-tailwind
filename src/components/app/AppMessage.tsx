@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
 import { Message } from "../../modules/message/message";
 import { messageService } from "../../modules/message/messageService";
 import { storeCommit } from "../../modules/store/storeCommit";
-import { User } from "../../modules/user/user";
+import { useStoreSelector } from "../../modules/store/storeSelector";
+import { User, userDefaults } from "../../modules/user/user";
 import { userService } from "../../modules/user/userService";
 import BaseButton from "../ui/BaseButton";
 
 export default function AppMessage(props: any) {
-  const users: User[] = useSelector((state: any) => {
-    return state.users.users
+  const users = useStoreSelector<User[]>({
+    selector: 'users.users',
   })
   const usersMap = useMemo(() => {
     return users.reduce((acc: any, item: User) => {
@@ -18,9 +18,7 @@ export default function AppMessage(props: any) {
     }, {})
   }, [users])
   const message: Message = props.message
-  const [user, setUser] = useState({
-    _id: '', id: '', name: '', avatar: ''
-  })
+  const [user, setUser] = useState(userDefaults)
 
   useEffect(() => {
     userService.currentUser().then(user => {
@@ -28,7 +26,9 @@ export default function AppMessage(props: any) {
     })
   }, [])
 
-  const messagesAll: Message[] = useSelector((state: any) => state.messages.messages)
+  const messagesAll: Message[] = useStoreSelector({
+    selector: 'messages.messages'
+  })
   const onDelete = (id: string) => async () => {
     await messageService.crud.deleteById(id, async () => {
       if (messagesAll.length !== 1) {

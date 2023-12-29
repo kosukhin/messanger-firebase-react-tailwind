@@ -1,4 +1,3 @@
-import { log } from "console";
 import { initializeApp } from "firebase/app";
 import {
   addDoc,
@@ -20,13 +19,6 @@ initializeApp({
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID
 });
 const db = getFirestore();
-
-console.log({
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID
-});
-
 
 type FirebaseActions = 'add' | 'update' | 'remove' | 'get' | 'list' | 'onCollection' | 'onDocument'
 
@@ -111,26 +103,18 @@ export async function firebase(model: Firebase): Promise<Firebase> {
     }
   }
 
-  console.log(model);
-
-
   if (model.action === 'onCollection') {
     let q: any = collection(db, model.collection);
     onSnapshot(
       q,
-      async (snapshot: any) => {           // ...
+      async (snapshot: any) => {
         const result = await getShapshotResults(snapshot)
-
-        console.log(result);
 
         if (model.data.onData) {
           model.data.onData(result)
         }
       },
       (error) => {
-        console.log(error);
-
-        // ...
         if (model.data.onError) {
           model.data.onError(error)
         }

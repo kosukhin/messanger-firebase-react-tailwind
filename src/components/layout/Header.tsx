@@ -1,10 +1,9 @@
 import {useEffect, useState} from "react";
 import {userService} from "../../modules/user/userService";
+import { userDefaults } from "../../modules/user/user";
 
 function Header() {
-  const [user, setUser] = useState({
-    _id: '', id: '', name: '', avatar: ''
-  })
+  const [user, setUser] = useState(userDefaults)
 
   useEffect(() => {
     userService.currentUser().then(user => {

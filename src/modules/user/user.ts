@@ -9,3 +9,7 @@ export type User = {
   name: string,
   avatar: string
 }
+
+export const userDefaults = {
+  _id: '', id: '', name: '', avatar: ''
+}
