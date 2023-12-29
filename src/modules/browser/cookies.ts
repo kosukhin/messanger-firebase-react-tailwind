@@ -1,4 +1,5 @@
 import SystemCookies from "js-cookie";
+import { ID } from "../base/id";
 
 export type Cookies<T = void> = (
   key: string,
@@ -7,7 +8,7 @@ export type Cookies<T = void> = (
   timeout?: number ,
 ) => T
 
-export const cookies: Cookies<Parameters<Cookies>> = (
+export const cookies: Cookies<ID<Cookies>> = (
   key,
   value?,
   operation = 'r',
