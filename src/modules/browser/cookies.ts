@@ -1,32 +1,32 @@
 import SystemCookies from "js-cookie";
 
-export type Cookies = {
+export type Cookies<T = void> = (
   key: string,
-  operation: 'r' | 'w' | 'd',
-  timeout: number ,
   value?: string,
-}
+  operation?: 'r' | 'w' | 'd',
+  timeout?: number ,
+) => T
 
-export const cookiesDefaults: Pick<Cookies, 'operation' | 'timeout'> = {
-  operation: 'r',
-  timeout: 7
-}
-
-export function cookies(model: Cookies): Cookies {
-  if (model.operation === "r") {
-    const cookie = SystemCookies.get(model.key);
-    model.value = cookie
+export const cookies: Cookies<Parameters<Cookies>> = (
+  key,
+  value?,
+  operation = 'r',
+  timeout = 7,
+) => {
+  if (operation === "r") {
+    const cookie = SystemCookies.get(key);
+    value = cookie
   }
 
-  if (model.operation === "w") {
-    SystemCookies.set(model.key, String(model.value), {
-      expires: model.timeout,
+  if (operation === "w") {
+    SystemCookies.set(key, String(value), {
+      expires: timeout,
     });
   }
 
-  if (model.operation === "d") {
-    SystemCookies.remove(model.key);
+  if (operation === "d") {
+    SystemCookies.remove(key);
   }
 
-  return model;
+  return [key, value, operation, timeout];
 }

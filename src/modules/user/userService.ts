@@ -10,9 +10,8 @@ export namespace userService {
   export const crud = firebaseService.buildCrud(USERS_COLLECTION)
 
   export async function currentUser() {
-    const userIdCookie = await profileService.userId()
-    const userId = String(userIdCookie.value)
-    const existedUser = await crud.getById(userId)
+    const [, userId] = profileService.userId()
+    const existedUser = await crud.getById(String(userId))
 
     if (existedUser) {
       return {
