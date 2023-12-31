@@ -1,81 +1,36 @@
-import { firebase, firebaseDefaults } from "./firebase";
+import { firebase } from "./firebase";
 
 export namespace firebaseService {
   export function buildCrud(collectionName: string) {
-    const baseModel = {
-      ...firebaseDefaults,
-      action: 'get',
-      collection: collectionName
-    }
-
     return {
-      async getById(id: string) {
-        const result = await firebase({
-          ...baseModel,
-          action: 'get',
-          data: {
-            id
-          }
-        });
-
-        return result.result;
+      async getById<T>(id: string) {
+        return await firebase<T>('get', collectionName, { id });
       },
 
       async getAll() {
-        const result = await firebase({
-          ...baseModel,
-          action: 'list'
-        });
-
-        return result.result;
+        return await firebase("list", collectionName);
       },
 
       async findById(id: string) {
-        const result = await firebase({
-          ...baseModel,
-          action: 'list',
-          data: {
-            where: [
-              ['id', '==', id]
-            ]
-          }
+        return await firebase("list", collectionName, {
+          where: [["id", "==", id]],
         });
-
-        return result.result;
       },
 
       async deleteById(id: string, onDelete?: Function) {
-        const result = await firebase({
-          ...baseModel,
-          action: 'remove',
-          data: {
-            id,
-            onDelete
-          }
+        return await firebase("remove", collectionName, {
+          id,
+          onDelete,
         });
-
-        return result.result;
       },
 
       async update(data: any) {
-        const result = await firebase({
-          ...baseModel,
-          action: 'update',
-          data
-        });
-
-        return result.result;
+        return await firebase("update", collectionName, data);
       },
 
       async create(data: any) {
-        const result = await firebase({
-          ...baseModel,
-          action: 'add',
-          data
-        });
-
-        return result.isDone
-      }
-    }
+        return await firebase("add", collectionName, data);
+      },
+    };
   }
 }

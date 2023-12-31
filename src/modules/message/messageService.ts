@@ -1,4 +1,3 @@
-import { firebaseDefaults } from './../firebase/firebase';
 import { firebase } from "../firebase/firebase";
 import { firebaseService } from "../firebase/firebaseService";
 import { storeCommit } from "../store/storeCommit";
@@ -8,18 +7,10 @@ export namespace messageService {
   export const crud = firebaseService.buildCrud(MESSAGE_COLLECTION)
 
   export async function watchMessages() {
-    await firebase({
-      ...firebaseDefaults,
-      action: 'onCollection',
-      collection: MESSAGE_COLLECTION,
-      data: {
-        async onData(data: Message[]) {
-          storeCommit({
-            action: 'setMessages',
-            payload: data
-          })
-        },
-      }
+    await firebase('onCollection', MESSAGE_COLLECTION, {
+      async onData(data: Message[]) {
+        storeCommit('setMessages', data)
+      },
     })
   }
 }

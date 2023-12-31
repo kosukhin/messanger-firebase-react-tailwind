@@ -13,7 +13,7 @@ function Navbar() {
     const id = hash();
     const formData = new FormData(e.target as HTMLFormElement)
     await groupService.crud.create({
-      id: id.value,
+      id,
       name: String(formData.get('name')),
     })
   }

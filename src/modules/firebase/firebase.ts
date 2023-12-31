@@ -22,22 +22,20 @@ const db = getFirestore();
 
 type FirebaseActions = 'add' | 'update' | 'remove' | 'get' | 'list' | 'onCollection' | 'onDocument'
 
-export type Firebase = {
-  action: FirebaseActions,
-  collection: string,
-  data: any,
-  isDone: boolean,
-  result: any,
-  id?: string
+export class Firebase {
+  constructor(
+    public action: FirebaseActions,
+    public collection: string,
+    public data?: any
+  ) {}
 }
 
-export const firebaseDefaults = {
-  isDone: false as boolean,
-  result: null,
-  data: {} as any
-}
+export async function firebase<T extends any>(
+  ...props: ConstructorParameters<typeof Firebase>
+): Promise<T> {
+  const model = new Firebase(...props);
+  let result = null
 
-export async function firebase(model: Firebase): Promise<Firebase> {
   if (model.action === 'add') {
     const addResult = await addDoc(
       collection(
@@ -46,43 +44,29 @@ export async function firebase(model: Firebase): Promise<Firebase> {
       ),
       model.data
     );
-    model = {
-      ...model,
-      isDone: true,
-      result: addResult
-    }
+    result = addResult
   }
 
   if (model.action === 'update') {
-    const {_id, ...data} = model.data
-    const result = doc(db, model.collection, _id);
-    const updateResult = await setDoc(result, data);
-    return {
-      ...model,
-      isDone: true,
-      result: updateResult
-    }
+    const {id, ...data} = model.data
+    const resultDoc = doc(db, model.collection, id);
+    const updateResult = await setDoc(resultDoc, data);
+    result = updateResult
   }
 
   if (model.action === 'remove') {
-    const result = doc(db, model.collection, model.data.id);
-    const deletionResult = await deleteDoc(result);
+    const resultDoc = doc(db, model.collection, model.data.id);
+    const deletionResult = await deleteDoc(resultDoc);
     if (model.data.onDelete) {
       model.data.onDelete();
     }
-    return {
-      ...model,
-      result: deletionResult
-    }
+    result = deletionResult
   }
 
   if (model.action === 'get') {
-    const result = doc(db, model.collection, model.data.id);
-    const docSnap = await getDoc(result);
-    return {
-      ...model,
-      result: docSnap.data()
-    }
+    const resultDoc = doc(db, model.collection, model.data.id);
+    const docSnap = await getDoc(resultDoc);
+    result = docSnap.data()
   }
 
   if (model.action === 'list') {
@@ -95,12 +79,9 @@ export async function firebase(model: Firebase): Promise<Firebase> {
       q = query(q, ...wheres);
     }
     const querySnapshot = await getDocs(q);
-    const result = await getShapshotResults(querySnapshot as any)
+    const resultDoc = await getShapshotResults(querySnapshot as any)
 
-    return {
-      ...model,
-      result
-    }
+    result = resultDoc
   }
 
   if (model.action === 'onCollection') {
@@ -121,11 +102,7 @@ export async function firebase(model: Firebase): Promise<Firebase> {
       });
   }
 
-  if (model.action === 'onDocument') {
-
-  }
-
-  return model;
+  return result as T;
 }
 
 async function getShapshotResults(shapshot: any) {

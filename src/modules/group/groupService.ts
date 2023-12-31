@@ -1,4 +1,3 @@
-import { firebaseDefaults } from './../firebase/firebase';
 import { firebase } from "../firebase/firebase";
 import { firebaseService } from "../firebase/firebaseService";
 import { storeCommit } from "../store/storeCommit";
@@ -8,18 +7,10 @@ export namespace groupService {
   export const crud = firebaseService.buildCrud(GROUP_COLLECTION)
 
   export async function watchGroups() {
-    await firebase({
-      ...firebaseDefaults,
-      action: 'onCollection',
-      collection: GROUP_COLLECTION,
-      data: {
-        async onData(data: Group[]) {
-          storeCommit({
-            action: 'setGroups',
-            payload: data
-          })
-        },
-      }
+    await firebase('onCollection', GROUP_COLLECTION, {
+      async onData(data: Group[]) {
+        storeCommit('setGroups', data)
+      },
     })
   }
 }

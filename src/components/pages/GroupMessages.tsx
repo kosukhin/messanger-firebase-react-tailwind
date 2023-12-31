@@ -1,11 +1,11 @@
 import { FormEvent, useMemo } from "react";
-import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 import { Group } from "../../modules/group/group";
 import { groupService } from "../../modules/group/groupService";
 import { Message } from "../../modules/message/message";
 import { profileService } from "../../modules/profile/profileService";
 import { storeCommit } from "../../modules/store/storeCommit";
+import { useStoreSelector } from "../../modules/store/storeSelector";
 import AppMessage from "../app/AppMessage";
 import BaseButton from "../ui/BaseButton";
 
@@ -17,8 +17,8 @@ export async function loader({params}: any) {
 
 export default function GroupMessages() {
   const ld = useLoaderData() as any;
-  const messages: Message[] = useSelector((state: any) => state.messages.messages)
-  const groupItems: Group[] = useSelector((state: any) => state.groups.groups)
+  const messages = useStoreSelector<Message[]>('messages.messages')
+  const groupItems = useStoreSelector<Group[]>('groups.groups')
   const groupMessages = useMemo(() => {
     return messages.filter((message: Message) => {
       return message.groupId === ld.id
@@ -42,14 +42,7 @@ export default function GroupMessages() {
   const onDeleteGroup = async (e: Event) => {
     e.preventDefault();
     await groupService.crud.deleteById(ld.id, async () => {
-      if (groupItems.length !== 1) {
-        return;
-      }
-
-      await storeCommit({
-        action: 'setGroups',
-        payload: []
-      })
+      !groupItems.length && storeCommit('setGroups', [])
     })
   }
 

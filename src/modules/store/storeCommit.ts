@@ -17,13 +17,17 @@ const actions: any = {
   setUsers
 }
 
-export type StoreCommit = {
-  action: string,
-  payload?: any
+export class StoreCommit {
+  constructor(
+    public action: string,
+    public payload?: any
+  ) {}
 }
 
-export function storeCommit(model: StoreCommit) {
-  if (actions[model.action]) {
-    store.dispatch(actions[model.action](model.payload))
+export function storeCommit(...props: ConstructorParameters<typeof StoreCommit>) {
+  const {action, payload} = new StoreCommit(...props);
+
+  if (actions[action]) {
+    store.dispatch(actions[action](payload))
   }
 }

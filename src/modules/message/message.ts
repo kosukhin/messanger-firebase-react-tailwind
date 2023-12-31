@@ -1,9 +1,15 @@
 export const MESSAGE_COLLECTION = 'messages'
 
-export type Message = {
-  _id: string,
-  groupId: string,
-  text: string,
-  fromId: string,
-  time: number
+export class Message {
+  constructor(
+    public _id: string,
+    public groupId: string,
+    public text: string,
+    public fromId: string,
+    public time: number
+  ) {}
 }
+
+export const message = (
+  ...props: ConstructorParameters<typeof Message>
+) => new Message(...props)

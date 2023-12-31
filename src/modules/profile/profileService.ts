@@ -1,7 +1,6 @@
 import { cookies } from "../browser/cookies";
 import { firebase } from "../firebase/firebase";
 import { hash } from "../security/hash";
-import { firebaseDefaults } from './../firebase/firebase';
 import { PROFILE_COOKIE_ID_KEY, PROFILE_COOKIE_LIFE_TIME } from "./profile";
 
 export namespace profileService {
@@ -10,13 +9,13 @@ export namespace profileService {
   }
 
   export async function initProfile() {
-    const [key, value] = userId();
+    const theUserId = userId();
 
-    if (!value) {
+    if (!theUserId) {
       const uid = hash()
       cookies(
-        key,
-        uid.value,
+        PROFILE_COOKIE_ID_KEY,
+        uid,
         'w',
         PROFILE_COOKIE_LIFE_TIME
       )
@@ -27,19 +26,14 @@ export namespace profileService {
     text: string,
     groupId: string
   ) {
-    const [, value] = userId()
-    const result = await firebase({
-      ...firebaseDefaults,
-      action: 'add',
-      collection: 'messages',
-      data: {
-        groupId,
-        fromId: String(value),
-        text,
-        time: (new Date()).getTime()
-      }
+    const theUserId = userId()
+    const result = await firebase('add', 'messages', {
+      groupId,
+      fromId: String(theUserId),
+      text,
+      time: (new Date()).getTime()
     });
 
-    return result.isDone
+    return !!result
   }
 }

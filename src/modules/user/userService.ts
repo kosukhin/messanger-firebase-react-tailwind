@@ -3,46 +3,32 @@ import { firebaseService } from "../firebase/firebaseService";
 import { Message } from "../message/message";
 import { profileService } from "../profile/profileService";
 import { storeCommit } from "../store/storeCommit";
-import { firebaseDefaults } from './../firebase/firebase';
-import { DEFAULT_AVATAR, DEFAULT_NAME, USERS_COLLECTION } from "./user";
+import { USERS_COLLECTION, User, user } from "./user";
 
 export namespace userService {
   export const crud = firebaseService.buildCrud(USERS_COLLECTION)
 
   export async function currentUser() {
-    const [, userId] = profileService.userId()
-    const existedUser = await crud.getById(String(userId))
+    const theUserId = profileService.userId()
+    const existedUser = await crud.getById<User>(
+      String(theUserId)
+    )
 
     if (existedUser) {
       return {
-        _id: existedUser.id,
-        id: existedUser.id,
-        name: existedUser.name,
-        avatar: existedUser.avatar,
-      }
+        ...user(theUserId, theUserId),
+        ...existedUser
+      };
     }
 
-    return {
-      _id: userId,
-      id: userId,
-      name: DEFAULT_NAME,
-      avatar: DEFAULT_AVATAR
-    }
+    return user(theUserId, theUserId)
   }
 
   export async function watchUsers() {
-    await firebase({
-      ...firebaseDefaults,
-      action: 'onCollection',
-      collection: USERS_COLLECTION,
-      data: {
-        async onData(data: Message[]) {
-          storeCommit({
-            action: 'setUsers',
-            payload: data
-          })
-        },
-      }
+    await firebase('onCollection', USERS_COLLECTION, {
+      async onData(data: Message[]) {
+        storeCommit('setUsers', data)
+      },
     })
   }
 }

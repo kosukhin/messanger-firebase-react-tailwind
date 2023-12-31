@@ -1,12 +1,17 @@
 import { useSelector } from "react-redux";
 
-export type StoreSelector = {
-  selector: string;
-};
+export class StoreSelector {
+  constructor(
+    public selector: string
+  ) {}
+}
 
-export function useStoreSelector<T>(model: StoreSelector): T {
+export function useStoreSelector<T>(
+  ...props: ConstructorParameters<typeof StoreSelector>
+): T {
+  let {selector} = new StoreSelector(...props);
   return useSelector((state: any) => {
-    const parts = model.selector.split(".");
+    const parts = selector.split(".");
     return parts.reduce((acc, item) => {
         acc = acc[item]
       return acc;

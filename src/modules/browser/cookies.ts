@@ -1,33 +1,31 @@
 import SystemCookies from "js-cookie";
-import { ID } from "../base/id";
 
-export type Cookies<T = void> = (
-  key: string,
-  value?: string,
-  operation?: 'r' | 'w' | 'd',
-  timeout?: number ,
-) => T
+export class Cookies {
+  constructor(
+    public key: string,
+    public value?: string,
+    public operation: 'r' | 'w' | 'd' = 'r',
+    public timeout: number = 7,
+  ) {}
+}
 
-export const cookies: Cookies<ID<Cookies>> = (
-  key,
-  value?,
-  operation = 'r',
-  timeout = 7,
-) => {
-  if (operation === "r") {
-    const cookie = SystemCookies.get(key);
-    value = cookie
+export function cookies(...props: ConstructorParameters<typeof Cookies>) {
+  const model = new Cookies(...props);
+
+  if (model.operation === "r") {
+    const cookie = SystemCookies.get(model.key);
+    model.value = cookie
   }
 
-  if (operation === "w") {
-    SystemCookies.set(key, String(value), {
-      expires: timeout,
+  if (model.operation === "w") {
+    SystemCookies.set(model.key, String(model.value), {
+      expires: model.timeout,
     });
   }
 
-  if (operation === "d") {
-    SystemCookies.remove(key);
+  if (model.operation === "d") {
+    SystemCookies.remove(model.key);
   }
 
-  return [key, value, operation, timeout];
+  return model.value;
 }

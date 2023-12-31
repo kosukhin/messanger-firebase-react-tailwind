@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {userService} from "../../modules/user/userService";
-import { userDefaults } from "../../modules/user/user";
+import { user } from "../../modules/user/user";
 
 function Header() {
-  const [user, setUser] = useState(userDefaults)
+  const [theUser, setUser] = useState(user())
 
   useEffect(() => {
     userService.currentUser().then(user => {
@@ -15,7 +15,7 @@ function Header() {
     <a href="/">Firebase-messenger</a>
     <a className={'block ml-auto'} href="/messages">Все сообщения</a>
     <a className={'block'} href="/profile">Профиль</a>
-    <img className="w-6 h-6 rounded-full" src={user.avatar} alt="Rounded avatar"/>
+    <img className="w-6 h-6 rounded-full" src={theUser.avatar} alt="Rounded avatar"/>
   </header>)
 }
 
