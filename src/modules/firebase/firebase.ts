@@ -22,57 +22,50 @@ const db = getFirestore();
 
 type FirebaseActions = 'add' | 'update' | 'remove' | 'get' | 'list' | 'onCollection' | 'onDocument'
 
-export class Firebase {
-  constructor(
-    public action: FirebaseActions,
-    public collection: string,
-    public data?: any
-  ) {}
-}
-
 export async function firebase<T extends any>(
-  ...props: ConstructorParameters<typeof Firebase>
+  action: FirebaseActions,
+  collectionName: string,
+  inData?: any
 ): Promise<T> {
-  const model = new Firebase(...props);
   let result = null
 
-  if (model.action === 'add') {
+  if (action === 'add') {
     const addResult = await addDoc(
       collection(
         db,
-        model.collection
+        collectionName
       ),
-      model.data
+      inData
     );
     result = addResult
   }
 
-  if (model.action === 'update') {
-    const {id, ...data} = model.data
-    const resultDoc = doc(db, model.collection, id);
+  if (action === 'update') {
+    const {id, ...data} = inData
+    const resultDoc = doc(db, collectionName, id);
     const updateResult = await setDoc(resultDoc, data);
     result = updateResult
   }
 
-  if (model.action === 'remove') {
-    const resultDoc = doc(db, model.collection, model.data.id);
+  if (action === 'remove') {
+    const resultDoc = doc(db, collectionName, inData.id);
     const deletionResult = await deleteDoc(resultDoc);
-    if (model.data.onDelete) {
-      model.data.onDelete();
+    if (inData.onDelete) {
+      inData.onDelete();
     }
     result = deletionResult
   }
 
-  if (model.action === 'get') {
-    const resultDoc = doc(db, model.collection, model.data.id);
+  if (action === 'get') {
+    const resultDoc = doc(db, collectionName, inData.id);
     const docSnap = await getDoc(resultDoc);
     result = docSnap.data()
   }
 
-  if (model.action === 'list') {
-    let q: any = collection(db, model.collection);
-    if (model.data.where) {
-      const wheres = model.data.where.map((whereCondition: any) => {
+  if (action === 'list') {
+    let q: any = collection(db, collectionName);
+    if (inData.where) {
+      const wheres = inData.where.map((whereCondition: any) => {
         const [field, comparator, value] = whereCondition
         return where(field, comparator, value)
       })
@@ -84,20 +77,20 @@ export async function firebase<T extends any>(
     result = resultDoc
   }
 
-  if (model.action === 'onCollection') {
-    let q: any = collection(db, model.collection);
+  if (action === 'onCollection') {
+    let q: any = collection(db, collectionName);
     onSnapshot(
       q,
       async (snapshot: any) => {
         const result = await getShapshotResults(snapshot)
 
-        if (model.data.onData) {
-          model.data.onData(result)
+        if (inData.onData) {
+          inData.onData(result)
         }
       },
       (error) => {
-        if (model.data.onError) {
-          model.data.onError(error)
+        if (inData.onError) {
+          inData.onError(error)
         }
       });
   }

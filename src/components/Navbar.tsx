@@ -1,22 +1,11 @@
-import { FormEvent } from "react";
-import { useSelector } from "react-redux";
-import { Group } from "../modules/group/group";
-import { groupService } from "../modules/group/groupService";
-import { hash } from "../modules/security/hash";
+import { navbarController } from "../controllers/navbarController";
 import BaseButton from "./ui/BaseButton";
 
-function Navbar() {
-  const groups: Group[] = useSelector((state: any) => state.groups.groups)
-
-  const onSave = async (e: FormEvent) => {
-    e.preventDefault();
-    const id = hash();
-    const formData = new FormData(e.target as HTMLFormElement)
-    await groupService.crud.create({
-      id,
-      name: String(formData.get('name')),
-    })
-  }
+export default function Navbar() {
+  const {
+    groups,
+    onSave
+  } = navbarController()
 
   return (<nav className="p-4 bg-navbar w-full max-w-[200px] flex flex-col">
     {groups ? groups.map(group => (
@@ -38,5 +27,3 @@ function Navbar() {
     </form>
   </nav>)
 }
-
-export default Navbar

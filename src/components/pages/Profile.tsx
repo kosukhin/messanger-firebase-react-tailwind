@@ -1,26 +1,11 @@
+import { profileController } from "../../controllers/pages/profileController";
 import BaseButton from "../ui/BaseButton";
-import {FormEvent, useEffect, useState} from "react";
-import {userService} from "../../modules/user/userService";
-import { user } from "../../modules/user/user";
 
 export default function Profile() {
-  const [theUser, setTheUser] = useState(user())
-
-  useEffect(() => {
-    userService.currentUser().then(user => {
-      setTheUser(user)
-    })
-  }, [])
-
-  const onSave = async (e: FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement)
-    await userService.crud.update({
-      ...theUser,
-      name: String(formData.get('name')),
-      avatar: String(formData.get('avatar'))
-    })
-  }
+  const {
+    onSave,
+    theUser
+  } = profileController()
 
   return (<div>
     <h1 className={'text-6xl mb-4'}>Профиль</h1>
